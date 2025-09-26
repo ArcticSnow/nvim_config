@@ -1,0 +1,54 @@
+
+---
+lightbox: true
+---
+
+# Site 2: Faillard en Foret
+
+
+{{< video media/video/test.mp4
+    title="Martre"
+>}}
+
+Import Python modules
+```{python}
+import pandas as pd 
+import glob, os
+import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
+
+
+
+x = np.arange(0,10,0.010)
+plt.figure()
+plt.plot(x, np.sin(x))
+plt.show()
+
+
+
+```
+
+Sample code to convert .avi file to .mp4 with compression (almost no loss in quality)
+```python
+flist = glob.glob('media/video_origin/IM*.avi')
+
+for file in flist:
+  cmd = f"ffmpeg -i {file} -vcodec libx265 -crf 28 {file[:-4]}.mp4"
+  os.system(cmd)
+```
+
+## Analyse des passages
+```{python}
+df = pd.read_csv('media/data/table_video_meta.csv')
+
+df = df.loc[df.site=='faillard_ouest']
+
+# 
+df.groupby('Animal').count()
+```
+
+
