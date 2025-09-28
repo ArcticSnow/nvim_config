@@ -1,3 +1,6 @@
+-- Plugin to automatically reopen the files and windows as I had last time leaving.
+-- https://github.com/rmagatti/auto-session
+
 return {
   "rmagatti/auto-session",
   lazy = false,

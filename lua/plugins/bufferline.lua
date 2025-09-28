@@ -1,3 +1,6 @@
+-- plugin to get the tabs for the open buffers
+
+
 return {
   "akinsho/bufferline.nvim",
   version = "*",
