@@ -37,7 +37,9 @@ set.smoothscroll = true		-- enable smooth scrolling
 set.mouse = "a" 		--enable mouse
 set.showcmd = true
 
+-- Searching
 set.ignorecase = true		--ignore case while searching
 set.smartcase = true		--but do not ignore if caps are used
-
+set.incsearch = true            -- search as characters are entered
+set.hlsearch = false            -- do not highlight matches
 

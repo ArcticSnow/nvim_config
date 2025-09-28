@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   sodipodi:docname="cheatsheet.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="2.2878991"
+     inkscape:cx="162.59458"
+     inkscape:cy="779.31757"
+     inkscape:window-width="1384"
+     inkscape:window-height="910"
+     inkscape:window-x="1987"
+     inkscape:window-y="235"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1"
+       width="22.579996"
+       height="9.2794523"
+       x="4.4632301"
+       y="36.637844"
+       ry="1.8151999" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="9.2669888"
+       y="42.592731"
+       id="text1"><tspan
+         sodipodi:role="line"
+         id="tspan1"
+         style="fill:#474973;stroke-width:0.264583"
+         x="9.2669888"
+         y="42.592731">Ctrl + t</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.98889"
+       y="42.592731"
+       id="text2"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.98889"
+         y="42.592731">Start terminal</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.93889px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="5.3502312"
+       y="30.54628"
+       id="text2-65"><tspan
+         sodipodi:role="line"
+         id="tspan2-6"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93889px;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="5.3502312"
+         y="30.54628">:terminal</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.93889px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="5.3502312"
+       y="136.21518"
+       id="text2-65-6"><tspan
+         sodipodi:role="line"
+         id="tspan2-6-8"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93889px;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="5.3502312"
+         y="136.21518">vim basic commands</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1-3"
+       width="22.579996"
+       height="9.2794523"
+       x="4.4632306"
+       y="48.684292"
+       ry="1.8151999" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="6.6211567"
+       y="54.639183"
+       id="text1-6"><tspan
+         sodipodi:role="line"
+         id="tspan1-0"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="6.6211567"
+         y="54.639183">Ctrl+\, ctrl+n </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.98889"
+       y="54.639183"
+       id="text2-6"><tspan
+         sodipodi:role="line"
+         id="tspan2-2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.98889"
+         y="54.639183">Normal mode in terminal</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1-3-50"
+       width="22.579996"
+       height="9.2794523"
+       x="4.4632301"
+       y="69.076736"
+       ry="1.8151999" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="7.5435715"
+       y="74.768593"
+       id="text1-6-9"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-6"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="7.5435715"
+         y="74.768593">leader + se</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.98889"
+       y="75.031624"
+       id="text2-6-3"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-8"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.98889"
+         y="75.031624">Send selected line to terminal</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="4.2391825"
+       y="67.49971"
+       id="text2-6-3-44"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-8-4"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="4.2391825"
+         y="67.49971">From visual mode to terminal</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1-3-50-5"
+       width="22.579996"
+       height="9.2794523"
+       x="4.4632301"
+       y="80.623833"
+       ry="1.8151999" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="7.5435715"
+       y="86.315689"
+       id="text1-6-9-9"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-6-8"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="7.5435715"
+         y="86.315689">leader + sl</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.98889"
+       y="86.57872"
+       id="text2-6-3-4"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-8-8"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.98889"
+         y="86.57872">Send selected line to terminal</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1-3-5"
+       width="22.579996"
+       height="9.2794523"
+       x="4.0723767"
+       y="142.25597"
+       ry="1.8151999" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="14.886952"
+       y="148.44215"
+       id="text1-6-4"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-7"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="14.886952"
+         y="148.44215">/</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.598036"
+       y="148.21086"
+       id="text2-6-4"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-4"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.598036"
+         y="148.21086">find</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1-3-5-7"
+       width="22.579996"
+       height="9.2794523"
+       x="3.9198949"
+       y="165.80899"
+       ry="1.8151999" />
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1-3-5-7-0"
+       width="22.579996"
+       height="9.2794523"
+       x="3.9198959"
+       y="192.01001"
+       ry="1.8151999" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="12.88859"
+       y="171.47742"
+       id="text1-6-4-1"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-7-7"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="12.88859"
+         y="171.47742">:Ex</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="13.869063"
+       y="197.67706"
+       id="text1-6-4-1-7"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-7-7-1"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="13.869063"
+         y="197.67706">%</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.445553"
+       y="171.76389"
+       id="text2-6-4-2"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-4-7"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.445553"
+         y="171.76389">Open vim explorer</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1-3-5-7-4"
+       width="22.579996"
+       height="9.2794523"
+       x="3.9198952"
+       y="178.74742"
+       ry="1.8151999" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="7.3709292"
+       y="184.16574"
+       id="text1-6-4-1-8"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-7-7-12"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="7.3709292"
+         y="184.16574">space + cd</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.445553"
+       y="184.70232"
+       id="text2-6-4-2-9"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-4-7-3"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.445553"
+         y="184.70232">Open vim explorer</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.445553"
+       y="197.50674"
+       id="text2-6-4-2-4"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-4-7-9"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.445553"
+         y="197.50674">Create new file</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1-3-5-7-0-7"
+       width="22.579996"
+       height="9.2794523"
+       x="3.9198959"
+       y="205.44044"
+       ry="1.8151999" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="9.1024332"
+       y="211.1075"
+       id="text1-6-4-1-7-6"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-7-7-1-7"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="9.1024332"
+         y="211.1075">:e ini.lua</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.445551"
+       y="210.93718"
+       id="text2-6-4-2-4-3"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-4-7-9-6"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.445551"
+         y="210.93718">Go to file init.lua</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.503559;stroke-dasharray:none"
+       id="rect1-3-5-7-0-7-1"
+       width="22.579996"
+       height="9.2794523"
+       x="3.9198959"
+       y="223.32462"
+       ry="1.8151999" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="9.1024332"
+       y="228.99167"
+       id="text1-6-4-1-7-6-7"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-7-7-1-7-5"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="9.1024332"
+         y="228.99167">:Lazy</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="31.445551"
+       y="228.82135"
+       id="text2-6-4-2-4-3-9"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-4-7-9-6-6"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="31.445551"
+         y="228.82135">Launch Lazy</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.329307;stroke-dasharray:none"
+       id="rect1-3-5-4"
+       width="9.4786005"
+       height="9.4537048"
+       x="3.9852505"
+       y="153.57393"
+       ry="1.8492862" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="6.2303033"
+       y="159.07938"
+       id="text1-6-4-9"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-7-2"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="6.2303033"
+         y="159.07938">/obj</tspan></text>
+    <rect
+       style="fill:#f1dac4;stroke:#161b33;stroke-width:0.329307;stroke-dasharray:none"
+       id="rect1-3-5-4-6"
+       width="9.4786005"
+       height="9.4537048"
+       x="15.374547"
+       y="153.57393"
+       ry="1.8492862" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.82222px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="19.211233"
+       y="159.09108"
+       id="text1-6-4-9-4"><tspan
+         sodipodi:role="line"
+         id="tspan1-0-7-2-9"
+         style="font-size:2.82222px;fill:#474973;stroke-width:0.264583"
+         x="19.211233"
+         y="159.09108">n</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="28.475628"
+       y="156.99072"
+       id="text2-6-4-0"><tspan
+         sodipodi:role="line"
+         id="tspan2-2-4-6"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="28.475628"
+         y="156.99072">1. find &quot;obj&quot; </tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';fill:#0d0c1d;stroke-width:0.264583"
+         x="28.475628"
+         y="161.5332"
+         id="tspan4">2. go to next occurrence</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:11.2889px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       x="59.552971"
+       y="12.810247"
+       id="text3"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.2889px;font-family:'Hack Nerd Font Mono';-inkscape-font-specification:'Hack Nerd Font Mono';stroke-width:0.264583"
+         x="59.552971"
+         y="12.810247">Cheatsheet Nvim</tspan></text>
+  </g>
+</svg>
