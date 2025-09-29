@@ -4,20 +4,20 @@ end
 
 return{
     -- lua/plugins/rose-pine.lua
-{
-	"rose-pine/neovim",
-	name = "rose-pine",
-	config = function()
-		vim.cmd("colorscheme rose-pine-dawn")
-	end
-},
---     {
--- 	"folke/tokyonight.nvim",
+-- {
+-- 	"rose-pine/neovim",
+-- 	name = "rose-pine",
 -- 	config = function()
--- 	    vim.cmd.colorscheme "tokyonight"
--- --	    enable_transparency()
+-- 		vim.cmd("colorscheme rose-pine-dawn")
 -- 	end
---     },
+-- },
+    {
+	"folke/tokyonight.nvim",
+	config = function()
+	    vim.cmd.colorscheme "tokyonight"
+--	    enable_transparency()
+	end
+    },
     {
 	"nvim-lualine/lualine.nvim",
 	dependencies = {
