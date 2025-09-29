@@ -6,9 +6,7 @@ lightbox: true
 # Site 2: Faillard en Foret
 
 
-{{< video media/video/test.mp4
-    title="Martre"
->}}
+{{< video media/video/test.mp4 title="Martre" >}}
 
 Import Python modules
 ```{python}
@@ -31,8 +29,10 @@ plt.show()
 
 
 ```
-
 Sample code to convert .avi file to .mp4 with compression (almost no loss in quality)
+
+
+
 ```python
 flist = glob.glob('media/video_origin/IM*.avi')
 
@@ -42,6 +42,7 @@ for file in flist:
 ```
 
 ## Analyse des passages
+
 ```{python}
 df = pd.read_csv('media/data/table_video_meta.csv')
 

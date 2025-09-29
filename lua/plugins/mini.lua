@@ -4,6 +4,7 @@ config = function()
 require('mini.basics').setup()
 require('mini.comment').setup()
 
+require('mini.icons').setup()
 require('mini.ai').setup()
 
 require('mini.pairs').setup()

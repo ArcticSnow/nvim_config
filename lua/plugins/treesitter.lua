@@ -7,7 +7,7 @@ return {
 	    highlight = {enable = true,},
 	    indent = {enable = true},
 	    autotage = {enable = true},
-	    ensure_installed = {"lua", "python", "markdown", "yaml", "julia", "ini", "fortran", "bibtex"},
+	    ensure_installed = {"lua", "python", "markdown", "yaml", "julia", "ini", "fortran", "bibtex","markdown_inline"},
 	    auto_install = false,
 	})
     end
