@@ -1,4 +1,12 @@
+-- =====================================================================
+-- Title: Nvm keymaps 
+--
+-- =====================================================================
+
+
 vim.g.mapleader = " "
+vim.g.globalleader = " "
+
 vim.keymap.set("n", "<leader>cd", vim.cmd.Ex)
 
 
@@ -18,3 +26,23 @@ end)
 vim.keymap.set("v", "<space>sv", function()
     require("toggleterm").send_lines_to_terminal("visual_selection", trim_spaces, { args = vim.v.count })
 end)
+
+-- Terminal
+-- Better terminal navigation
+--
+-- vim.keymap.set("t", "<C-h", "<C-\\><C-w>h")
+
+
+-- Better window navigation
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to top window" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+
+-- Splitting & Resizing
+vim.keymap.set("n", "<leader>sv", "<Cmd>vsplit<CR>", { desc = "Split window vertically" })
+vim.keymap.set("n", "<leader>sh", "<Cmd>split<CR>", { desc = "Split window horizontally" })
+vim.keymap.set("n", "<C-Up>", "<Cmd>resize +2<CR>", { desc = "Increase window height" })
+vim.keymap.set("n", "<C-Down>", "<Cmd>resize -2<CR>", { desc = "Decrease window height" })
+vim.keymap.set("n", "<C-Left>", "<Cmd>vertical resize -2<CR>", { desc = "Decrease window width" })
+vim.keymap.set("n", "<C-Right>", "<Cmd>vertical resize +2<CR>", { desc = "Increase window width" })

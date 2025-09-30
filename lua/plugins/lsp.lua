@@ -7,15 +7,15 @@ return {
 	"mason-org/mason-lspconfig.nvim",
 	opts = {
 	    ensure_installed = {
-		"lua_ls",
-		"pyright",
-		"ts_ls",
-		"rust_analyzer",
 		"clangd",
-		"julials",
-		"html",
-		"markdown_oxide",
 		"fortls",
+		"html",
+		"julials",
+		"lua_ls",
+		"markdown_oxide",
+		"pyright",
+		"rust_analyzer",
+		"ts_ls",
 		"yamlls"
 
 	    },
@@ -24,15 +24,15 @@ return {
     {
 	"neovim/nvim-lspconfig",
 	config = function()
-	    vim.lsp.enable("lua_ls")
-	    vim.lsp.enable("pyright")
-	    vim.lsp.enable("ts_ls")
-	    vim.lsp.enable("rust_analyser")
 	    vim.lsp.enable("clangd")
-	    vim.lsp.enable("julials")
-	    vim.lsp.enable("html")
-	    vim.lsp.enable("markdown_oxide")
 	    vim.lsp.enable("fortls")
+	    vim.lsp.enable("html")
+	    vim.lsp.enable("julials")
+	    vim.lsp.enable("lua_ls")
+	    vim.lsp.enable("markdown_oxide")
+	    vim.lsp.enable("pyright")
+	    vim.lsp.enable("rust_analyser")
+	    vim.lsp.enable("ts_ls")
 	    vim.lsp.enable("yamlls")
 	end
     },
