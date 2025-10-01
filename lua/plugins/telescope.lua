@@ -72,10 +72,14 @@ return {
 	    })
 	end
 
-
+	-- Shortcut to search within my Github folder
 	vim.keymap.set('n', '<leader>fm', function()
 	    live_grep_with_extensions('~/github', {'txt', 'md', 'qmd', 'ipynb', 'py', 'cpp', 'h', 'f95', 'f77'})
 	end, { desc = 'Ripgrep search in files in my local github folder' })
 
+	-- Shortcut to search within my Obsidian vault (on MF computer)
+	vim.keymap.set('n', '<leader>fo', function()
+	    live_grep_with_extensions('~/Documents/MF_vault/', {'md'})
+	end, { desc = 'Ripgrep search in my Obsidian vault' })
     end
 }

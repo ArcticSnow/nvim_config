@@ -27,12 +27,28 @@ vim.keymap.set("v", "<space>sv", function()
     require("toggleterm").send_lines_to_terminal("visual_selection", trim_spaces, { args = vim.v.count })
 end)
 
+-- =========================================
 -- Terminal
 -- Better terminal navigation
---
--- vim.keymap.set("t", "<C-h", "<C-\\><C-w>h")
 
+local n_opts = {silent = true, noremap = true}
+local t_opts = {silent = true}
 
+-- Mode normal
+-- Meilleure navigation dans les fenêtres
+vim.keymap.set('n', '<C-Left>', '<C-w>h', n_opts)
+vim.keymap.set('n', '<C-Down>', '<C-w>j', n_opts)
+vim.keymap.set('n', '<C-Up>', '<C-w>k', n_opts)
+vim.keymap.set('n', '<C-Right>', '<C-w>l', n_opts)
+
+-- Mode terminal
+vim.keymap.set('t', '<esc>', '<C-\\><C-N>', t_opts)
+vim.keymap.set('t', '<C-Left>', '<C-\\><C-N><C-w>h', t_opts)
+vim.keymap.set('t', '<C-Down>', '<C-\\><C-N><C-w>j', t_opts)
+vim.keymap.set('t', '<C-Up>', '<C-\\><C-N><C-w>k', t_opts)
+vim.keymap.set('t', '<C-Right>', '<C-\\><C-N><C-w>l', t_opts)
+
+-- ==================================================
 -- Better window navigation
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
