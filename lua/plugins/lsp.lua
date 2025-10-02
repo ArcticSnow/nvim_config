@@ -214,6 +214,12 @@ return {
         -- clangd = {},
         -- gopls = {},
         pyright = {},
+        fortls = {},
+        html = {},
+        julials = {},
+        markdown_oxide = {},
+        rust_analyzer = {},
+        yamlls = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
