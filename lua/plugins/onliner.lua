@@ -12,5 +12,7 @@ return {
       require('which-key').setup {}
       require 'config.keybinds'
     end,
-  },   
+  },  
+
+{ "rafamadriz/friendly-snippets" },
 }
