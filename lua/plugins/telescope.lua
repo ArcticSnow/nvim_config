@@ -81,5 +81,10 @@ return {
 	vim.keymap.set('n', '<leader>fo', function()
 	    live_grep_with_extensions('~/Documents/MF_vault/', {'md'})
 	end, { desc = 'Ripgrep search in my Obsidian vault' })
+
+	-- Shortcut to search within my PAPROG folder (on MF computer)
+	vim.keymap.set('n', '<leader>fp', function()
+	    live_grep_with_extensions('~/PAPROG/', {'txt', 'md', 'qmd', 'ipynb', 'py', 'cpp', 'h', 'f95', 'f77'})
+	end, { desc = 'Ripgrep search in my PAPROG folder' })
     end
 }
