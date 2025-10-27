@@ -27,20 +27,33 @@ vim.keymap.set("n", "[[", "<cmd>cprev<CR>", { silent = true })
 vim.keymap.set("n", "<c-[>", "<cmd>cclose<CR>", { silent = true })  -- to be checked
 
 -- move through buffers using n, p, and x to close buffer
-vim.keymap.set("n", "<leader>n",":bn<cr>")   -- move to next buffer
-vim.keymap.set("n", "<leader>p",":bp<cr>")   -- move to previous buffer
+vim.keymap.set("n", "<TAB>n","<cmd>bnext<cr>", {desc = "Move to next buffer"})   -- move to next buffer
+vim.keymap.set("n", "<tab>p","<cmd>bprevious<cr>", {desc = "Move to previous buffer"})   -- move to previous buffer
+vim.keymap.set("n", "<tab>q","<cmd>bd<cr>", {desc = "Close current buffer"})   -- move to previous buffer
 
--- keymaps for toggleterm to send lines of codes to terminal
-local trim_spaces = true
-vim.keymap.set("v", "<space>ss", function()
-    require("toggleterm").send_lines_to_terminal("single_line", trim_spaces, { args = vim.v.count })
-end)
-vim.keymap.set("v", "<space>sl", function()
-    require("toggleterm").send_lines_to_terminal("visual_lines", trim_spaces, { args = vim.v.count })
-end)
-vim.keymap.set("v", "<space>sv", function()
-    require("toggleterm").send_lines_to_terminal("visual_selection", trim_spaces, { args = vim.v.count })
-end)
+-- ##############      Simple REPL             ##########################
+vim.api.nvim_create_user_command('Repl', function(opts)
+  require('custom.plugins.term').toggle_repl()
+end, { range = false })
+
+vim.keymap.set('n', '<leader>xv', '<CMD>vsplit +Repl<CR>', { desc = 'Open REPL in vertical split' })
+vim.keymap.set('n', '<leader>xh', '<CMD>split +Repl<CR>', { desc = 'Open REPL in horizontal split' })
+vim.keymap.set('n', '<leader>xr', '<CMD>Repl<CR>', { desc = 'Open REPL in current window' })
+
+
+vim.keymap.set('v', 's', function()
+  require('custom.plugins.term').send_visual()
+end, { desc = 'Send visual selection to REPL' })
+
+vim.keymap.set({ 'n', 'i' }, '<A-s>', function()
+  require('custom.plugins.term').send_line()
+end, { desc = 'Send current line to REPL' })
+
+vim.keymap.set({ 'n' }, 's', function()
+  vim.go.operatorfunc = "v:lua.require'custom.plugins.term'.send_motion"
+  return 'g@'
+end, { expr = true, desc = 'Send lines to REPL using a motion' })
+
 
 -- =========================================
 -- terminal

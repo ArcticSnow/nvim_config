@@ -28,3 +28,36 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	})
     end,
 })
+
+
+
+
+-- ################### Quarto commands  #############################
+
+vim.api.nvim_create_user_command('GetCodeblocks', function(opts)
+  -- package.loaded['custom.plugins.term'] = nil
+  local term = require 'custom.plugins.term'
+  local start = tonumber(opts.fargs[1])
+  local stop = tonumber(opts.fargs[2])
+  local num_blocks = tonumber(opts.fargs[3])
+  -- term.get_codeblocks(start, stop, num_blocks)
+  term.send_codeblocks_before_cursor()
+end, { nargs = '*' })
+
+
+local function insert_python_code_block()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local lines = { '```{python}', '', '```' }
+  vim.api.nvim_buf_set_lines(0, row, row, false, lines)
+  vim.api.nvim_win_set_cursor(0, { row + 2, 0 })
+  vim.cmd 'startinsert'
+end
+
+local function split_python_code_block()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local lines = { '```', '', '```{python}' }
+  vim.api.nvim_buf_set_lines(0, row, row, false, lines)
+end
+
+vim.keymap.set('n', '<leader>cc', insert_python_code_block, { desc = 'Insert Python code block' })
+vim.keymap.set('n', '<leader>cs', split_python_code_block, { desc = 'Split Python code block' })

@@ -6,7 +6,12 @@
 -- ================================================================================================
 
 return {
-    { "echasnovski/mini.ai", version = "*", opts = {} },
+    { "echasnovski/mini.ai", version = "*", opts = {
+        custom_textobjects = {
+          -- Quarto code cell object
+          x = { '```%S+%s()[^`]+()```' },
+        },
+    } },
     { "echasnovski/mini.comment", version = "*", opts = {} },
     { "echasnovski/mini.move", version = "*", opts = {} },
     { "echasnovski/mini.surround", version = "*", opts = {} },
