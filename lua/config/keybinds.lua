@@ -27,18 +27,18 @@ vim.keymap.set("n", "[[", "<cmd>cprev<CR>", { silent = true })
 vim.keymap.set("n", "<c-[>", "<cmd>cclose<CR>", { silent = true })  -- to be checked
 
 -- move through buffers using n, p, and x to close buffer
-vim.keymap.set("n", "<TAB>n","<cmd>bnext<cr>", {desc = "Move to next buffer"})   -- move to next buffer
-vim.keymap.set("n", "<tab>p","<cmd>bprevious<cr>", {desc = "Move to previous buffer"})   -- move to previous buffer
-vim.keymap.set("n", "<tab>q","<cmd>bd<cr>", {desc = "Close current buffer"})   -- move to previous buffer
+vim.keymap.set("n", "<tab>","<cmd>bnext<cr>", {desc = "Move to next buffer"})   -- move to next buffer
+vim.keymap.set("n", "<S-tab>","<cmd>bprevious<cr>", {desc = "Move to previous buffer"})   -- move to previous buffer
+-- vim.keymap.set("n", "<q-tab>","<cmd>bd<cr>", {desc = "Close current buffer"})   -- move to previous buffer
 
 -- ##############      Simple REPL             ##########################
 vim.api.nvim_create_user_command('Repl', function(opts)
   require('custom.plugins.term').toggle_repl()
 end, { range = false })
 
-vim.keymap.set('n', '<leader>xv', '<CMD>vsplit +Repl<CR>', { desc = 'Open REPL in vertical split' })
-vim.keymap.set('n', '<leader>xh', '<CMD>split +Repl<CR>', { desc = 'Open REPL in horizontal split' })
-vim.keymap.set('n', '<leader>xr', '<CMD>Repl<CR>', { desc = 'Open REPL in current window' })
+vim.keymap.set('n', '<leader>tv', '<CMD>vsplit +Repl<CR>', { desc = 'Open REPL in vertical split' })
+vim.keymap.set('n', '<leader>th', '<CMD>split +Repl<CR>', { desc = 'Open REPL in horizontal split' })
+vim.keymap.set('n', '<leader>tr', '<CMD>Repl<CR>', { desc = 'Open REPL in current window' })
 
 
 vim.keymap.set('v', 's', function()
@@ -54,6 +54,7 @@ vim.keymap.set({ 'n' }, 's', function()
   return 'g@'
 end, { expr = true, desc = 'Send lines to REPL using a motion' })
 
+vim.keymap.set('n', '<leader>6', 'six', {desc = "Send current code block to REPL"})
 
 -- =========================================
 -- terminal

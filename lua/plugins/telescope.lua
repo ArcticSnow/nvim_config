@@ -30,7 +30,7 @@ return {
 	local builtin = require('telescope.builtin')
 	vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
 	vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
-	vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+	vim.keymap.set('n', '<leader>b', builtin.buffers, { desc = 'Telescope buffers' })
 	vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 
 	-- findout logic to have a shortcut to search my local folder /github. Try to find how to only include certain type of text ('.txt, .md, .qmd, .ipynb, .py, .html, .css, .cpp, .h, .f95, .f77, .csv, )
