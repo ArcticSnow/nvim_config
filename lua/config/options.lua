@@ -11,7 +11,6 @@ set.cursorline = true
 set.relativenumber = true
 
 
-
 -- use OS clipboard
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
