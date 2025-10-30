@@ -36,10 +36,10 @@ local function jump_backward_to_content()
 end
 
 -- Map <Leader>n to jump forward
-vim.keymap.set('n', '<Leader>n', jump_forward_to_content, { desc = 'Jump to next code block (Standard Markdown)' })
+vim.keymap.set('n', '<Leader>cn', jump_forward_to_content, { desc = 'Jump to next code block (Standard Markdown)' })
 
 -- Map <Leader>N to jump backward
-vim.keymap.set('n', '<Leader>b', jump_backward_to_content, { desc = 'Jump to previous code block (Standard Markdown)' })
+vim.keymap.set('n', '<Leader>cb', jump_backward_to_content, { desc = 'Jump to previous code block (Standard Markdown)' })
 --+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
