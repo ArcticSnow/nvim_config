@@ -1,5 +1,5 @@
 -- =====================================================================
--- title: nvm keymaps 
+-- [ ]- title: nvm keymaps
 --
 -- =====================================================================
 vim.g.mapleader = " "
@@ -18,31 +18,10 @@ function Map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, options)
 end
 
---+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- Shortcut to move from one codeblock cell to another one in quarto files
-local function jump_forward_to_content()
-  -- 1. Search for the next code block start (``` followed by a non-space character, like '```python')
-  -- '^\\s*```\\S' matches the opening fence, e.g., '```python' or '```r'
-  vim.fn.search('^\\s*```\\S', 'W')
-  -- 2. Search again, starting from the current line, for the first line *that is not empty*.
-  vim.fn.search('^\\S', 'W')
-end
 
-local function jump_backward_to_content()
-  -- 1. Search backward for the closing fence (```$)
-  vim.fn.search('^\\s*```$', 'bW')
-  -- 2. Move up two lines (2k) to land in the content of the PREVIOUS block.
-  vim.cmd('normal! 2k')
-end
-
--- Map <Leader>n to jump forward
-vim.keymap.set('n', '<Leader>cn', jump_forward_to_content, { desc = 'Jump to next code block (Standard Markdown)' })
-
--- Map <Leader>N to jump backward
-vim.keymap.set('n', '<Leader>cb', jump_backward_to_content, { desc = 'Jump to previous code block (Standard Markdown)' })
---+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
+vim.keymap.set({ 'n' }, '<leader>bd', function()
+  require('custom.plugins.utils').destroy_buffer()
+end, { desc = 'Destroy current buffer but do not close its window' })
 
 -- Indentation of mulitple line simplified
 Map("v", ">", "<gv")

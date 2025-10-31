@@ -30,34 +30,19 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 
+-- function to delete files from within neovim. Files are sent to the computer trashbin
+vim.api.nvim_create_user_command('DeleteFile',  function()
+  local filename = vim.api.nvim_buf_get_name(0)
+  if filename ~= '' then
+    os.execute('gio trash "' .. filename .. '"')
+  end
+  require('custom.plugins.utils').destroy_buffer()
+end, {})
+vim.keymap.set('n', '<leader>rm', ':DeleteFile', { desc = 'Delete current file (to trash)'})
 
 
--- ################### Quarto commands  #############################
-
-vim.api.nvim_create_user_command('GetCodeblocks', function(opts)
-  -- package.loaded['custom.plugins.term'] = nil
-  local term = require 'custom.plugins.term'
-  local start = tonumber(opts.fargs[1])
-  local stop = tonumber(opts.fargs[2])
-  local num_blocks = tonumber(opts.fargs[3])
-  -- term.get_codeblocks(start, stop, num_blocks)
-  term.send_codeblocks_before_cursor()
-end, { nargs = '*' })
-
-
-local function insert_python_code_block()
-  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local lines = { '```{python}', '', '```' }
-  vim.api.nvim_buf_set_lines(0, row, row, false, lines)
-  vim.api.nvim_win_set_cursor(0, { row + 2, 0 })
-  vim.cmd 'startinsert'
-end
-
-local function split_python_code_block()
-  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local lines = { '```', '', '```{python}' }
-  vim.api.nvim_buf_set_lines(0, row, row, false, lines)
-end
-
-vim.keymap.set('n', '<leader>cc', insert_python_code_block, { desc = 'Insert Python code block' })
-vim.keymap.set('n', '<leader>cs', split_python_code_block, { desc = 'Split Python code block' })
+-- autocommand when entering terminal command to go automatically in insert mode
+vim.api.nvim_create_autocmd({ 'WinEnter', 'BufWinEnter' }, {
+  pattern = { 'term://*' },
+  command = 'startinsert',
+})
