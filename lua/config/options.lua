@@ -52,7 +52,7 @@ set.termguicolors = true 				-- Enable 24-bit colors
 set.wildignorecase = true 	-- Case-insensitive tab completion in commands
 
 -- cursor line
-set.cursorline = false
+set.cursorline = true
 
 set.smoothscroll = true		-- enable smooth scrolling
 set.mouse = "a" 		--enable mouse

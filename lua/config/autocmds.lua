@@ -42,7 +42,7 @@ vim.keymap.set('n', '<leader>rm', ':DeleteFile', { desc = 'Delete current file (
 
 
 -- autocommand when entering terminal command to go automatically in insert mode
-vim.api.nvim_create_autocmd({ 'WinEnter', 'BufWinEnter' }, {
+vim.api.nvim_create_autocmd({ 'WinEnter', 'BufWinEnter', 'TermOpen' }, {
   pattern = { 'term://*' },
   command = 'startinsert',
 })
