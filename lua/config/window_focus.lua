@@ -1,41 +1,51 @@
 -- File: /home/simonfi/.config/nvim/lua/config/window_focus.lua
 
--- Require the new utility module
+-- Require the utility module
 local color_utils = require('custom.plugins.color_utils')
 
+-- Highlight groups for aggressive winhighlight
+local ACTIVE_WHL = 'Normal:ActiveWindow,LineNr:ActiveWindow,EndOfBuffer:ActiveWindow,VertSplit:ActiveBorder'
+local INACTIVE_WHL = 'Normal:InactiveWindow,LineNr:InactiveWindow,EndOfBuffer:InactiveWindow,VertSplit:InactiveBorder'
+
 -- Define global variables for the calculated colors
-local ACTIVE_COLOR = nil
-local INACTIVE_COLOR = nil
+local ACTIVE_BG = nil
+local INACTIVE_BG = nil
+local ACTIVE_FG = nil -- Theme's default foreground
+local INACTIVE_FG = nil -- Dimmed foreground
 
--- Define the highlight groups to be applied (aggressive winhighlight)
-local ACTIVE_WHL = 'Normal:ActiveWindow,LineNr:ActiveWindow,EndOfBuffer:ActiveWindow'
-local INACTIVE_WHL = 'Normal:InactiveWindow,LineNr:InactiveWindow,EndOfBuffer:InactiveWindow'
-
--- Function to calculate colors and define the highlight groups
-local function setup_dynamic_colors()
-  -- 1. Get the current colorscheme's background (Normal highlight group)
-  local hl = vim.api.nvim_get_hl_by_name('Normal', true)
-  
-  -- The guibg attribute is usually a 24-bit color code (e.g., 0x1f2335)
-  local current_bg = hl.background
-  
-  -- Convert the number to a hex string: "#1f2335"
-  local hex_bg = string.format("#%06x", current_bg)
-  
-  -- 2. Calculate the new, lighter background color (5% lighter)
-  INACTIVE_COLOR = color_utils.lighten(hex_bg, 0.1) 
-  ACTIVE_COLOR = hex_bg -- Inactive is just the theme's default background
-
-  -- 3. Redefine the highlight groups with the new dynamic colors
-  -- Note: We omit ctermbg as it's harder to calculate dynamically
-  vim.cmd("highlight ActiveWindow guibg=" .. ACTIVE_COLOR)
-  vim.cmd("highlight InactiveWindow guibg=" .. INACTIVE_COLOR)
+local function to_hex(number)
+  return string.format("#%06x", number)
 end
 
--- The function to apply the highlights remains the same
+local function setup_dynamic_colors()
+  -- 1. Read the theme's default Normal colors
+  local hl = vim.api.nvim_get_hl_by_name('Normal', true)
+  
+  local theme_bg = to_hex(hl.background)
+  local theme_fg = to_hex(hl.foreground)
+  
+  -- 2. Calculate dynamic colors
+  INACTIVE_BG = color_utils.lighten(theme_bg, 0.1) -- 5% lighter background for active window
+  ACTIVE_BG = theme_bg -- Theme's default background for inactive window
+  
+  INACTIVE_FG = theme_fg -- Theme's default foreground for active window
+  ACTIVE_FG = color_utils.darken(theme_fg, 0.20) -- 20% darker foreground for inactive window
+  
+  -- 3. Redefine the highlight groups with dynamic colors
+  -- Active Window: Background is 5% lighter, Foreground is theme's default.
+  vim.cmd("highlight ActiveWindow guibg=" .. ACTIVE_BG .. " guifg=" .. ACTIVE_FG)
+  
+  -- Inactive Window: Background is default, Foreground is 20% darker (dimmed text).
+  vim.cmd("highlight InactiveWindow guibg=" .. INACTIVE_BG .. " guifg=" .. INACTIVE_FG)
+  
+  -- Re-define border colors using hardcoded Tokyo Night colors
+ -- vim.cmd([[highlight ActiveBorder guifg=#7aa2f7 ctermfg=75]])   -- Vibrant Blue
+ -- vim.cmd([[highlight InactiveBorder guifg=#545c7e ctermfg=239]]) -- Dark Gray
+end
+
 local function highlight_active_window()
   -- Ensure colors are set before running the loop
-  if not ACTIVE_COLOR then
+  if not ACTIVE_BG then
     setup_dynamic_colors()
   end
 
@@ -50,16 +60,14 @@ local function highlight_active_window()
   end
 end
 
--- Define the Autocmd Group
+-- Your autocmd logic to ensure execution on start and colorscheme change
 local window_focus_group = vim.api.nvim_create_augroup('WindowFocusGroup', { clear = true })
 
--- Set the Autocommands to run the function when focus changes
 vim.api.nvim_create_autocmd({ 'VimEnter', 'WinEnter', 'BufRead' }, {
   group = window_focus_group,
   callback = highlight_active_window,
 })
 
--- Also run setup and highlight after colorscheme changes
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = window_focus_group,
   callback = function()

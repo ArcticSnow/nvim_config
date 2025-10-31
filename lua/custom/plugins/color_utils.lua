@@ -16,4 +16,17 @@ function M.lighten(hex, percent)
   return string.format("#%02x%02x%02x", r, g, b)
 end
 
+function M.darken(hex, percent)
+  -- Logic for darkening color
+  local r = tonumber(hex:sub(2, 3), 16)
+  local g = tonumber(hex:sub(4, 5), 16)
+  local b = tonumber(hex:sub(6, 7), 16)
+
+  r = math.max(0, r - math.floor(255 * percent))
+  g = math.max(0, g - math.floor(255 * percent))
+  b = math.max(0, b - math.floor(255 * percent))
+  
+  return string.format("#%02x%02x%02x", r, g, b)
+end
+
 return M
