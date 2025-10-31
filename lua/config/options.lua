@@ -67,3 +67,5 @@ set.hlsearch = false            -- do not highlight matches
 -- Split behavior
 set.splitbelow = true 		-- Horizontal splits open below
 set.splitright = true 	-- Vertical splits open to the right
+
+

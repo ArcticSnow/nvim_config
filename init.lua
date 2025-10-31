@@ -9,7 +9,7 @@ require("config.keybinds")
 require("config.lazy")
 require("config.autocmds")
 require("config.quarto")
-
+require("config.window_focus")
 
 
 
