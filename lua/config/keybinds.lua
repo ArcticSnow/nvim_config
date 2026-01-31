@@ -7,6 +7,8 @@ vim.g.globalleader = " "
 
 vim.keymap.set("n", "<leader>cd", vim.cmd.ex)
 
+-- add tab to line in visual mode
+--vim.keymap.set('v', '<Tab>', '>', { noremap = true, silent = true })
 
 
 -- function to force keymaps (https://readmedium.com/must-have-neovim-keymaps-51c283394070)
@@ -24,9 +26,8 @@ vim.keymap.set({ 'n' }, '<leader>bd', function()
 end, { desc = 'Destroy current buffer but do not close its window' })
 
 -- Indentation of mulitple line simplified
-Map("v", ">", "<gv")
-Map("v", "<", ">gv")
-
+vim.keymap.set("v", "<", "<gv", { noremap = true })
+vim.keymap.set("v", ">", ">gv", { noremap = true })
 
 
 -- Keymap to simplify interaction with quickfix
@@ -35,8 +36,8 @@ vim.keymap.set("n", "[[", "<cmd>cprev<CR>", { silent = true })
 vim.keymap.set("n", "<c-[>", "<cmd>cclose<CR>", { silent = true })  -- to be checked
 
 -- move through buffers using n, p, and x to close buffer
-vim.keymap.set("n", "<tab>","<cmd>bnext<cr>", {desc = "Move to next buffer"})   -- move to next buffer
-vim.keymap.set("n", "<S-tab>","<cmd>bprevious<cr>", {desc = "Move to previous buffer"})   -- move to previous buffer
+vim.keymap.set("n", "<tab>","<cmd>bnext<cr>", {noremap=true, desc = "Move to next buffer"})   -- move to next buffer
+vim.keymap.set("n", "<S-tab>","<cmd>bprevious<cr>", {noremap=true, desc = "Move to previous buffer"})   -- move to previous buffer
 -- vim.keymap.set("n", "<q-tab>","<cmd>bd<cr>", {desc = "Close current buffer"})   -- move to previous buffer
 
 -- ##############      Simple REPL             ##########################

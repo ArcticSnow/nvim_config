@@ -46,3 +46,24 @@ vim.api.nvim_create_autocmd({ 'WinEnter', 'BufWinEnter', 'TermOpen' }, {
   pattern = { 'term://*' },
   command = 'startinsert',
 })
+
+
+-- 1. Create the user command: :ImageRender
+vim.api.nvim_create_user_command(
+    'ImageRender',                                  -- The name of the new command
+    function()
+        -- Safely require the 'image' module and call its render method
+        local ok, image = pcall(require, "image")
+        if ok and image and image.render then
+            image.render()
+        else
+            -- Display an error if the module or function is missing
+            vim.notify("Error: 'image' module not found or missing render() function.", vim.log.levels.ERROR)
+        end
+    end,
+    {
+        -- Options for the command
+        desc = 'Render images in the current buffer using image.nvim',
+        nargs = 0, -- Takes zero arguments
+    }
+)

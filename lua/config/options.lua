@@ -9,7 +9,7 @@ local set = vim.opt
 set.number = true
 set.cursorline = true
 set.relativenumber = true
-
+set.foldmethod = "indent"  	-- by default use indetation for folding (type 'za' to toggle in 'n' mode)
 
 -- use OS clipboard
 vim.schedule(function()

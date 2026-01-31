@@ -23,4 +23,5 @@ return {
     { "echasnovski/mini.notify", version = "*", opts = {} },
     { "echasnovski/mini.icons", version = "*", opts = {} },
     { "echasnovski/mini.bracketed", version = "*", opts = {} },
+    { "echasnovski/mini.snippets", version = "*", opts = {} },
 }
