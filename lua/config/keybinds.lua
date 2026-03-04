@@ -40,30 +40,63 @@ vim.keymap.set("n", "<tab>","<cmd>bnext<cr>", {noremap=true, desc = "Move to nex
 vim.keymap.set("n", "<S-tab>","<cmd>bprevious<cr>", {noremap=true, desc = "Move to previous buffer"})   -- move to previous buffer
 -- vim.keymap.set("n", "<q-tab>","<cmd>bd<cr>", {desc = "Close current buffer"})   -- move to previous buffer
 
--- ##############      Simple REPL             ##########################
-vim.api.nvim_create_user_command('Repl', function(opts)
-  require('custom.plugins.term').toggle_repl()
-end, { range = false })
 
-vim.keymap.set('n', '<leader>tv', '<CMD>vsplit +Repl<CR>', { desc = 'Open REPL in vertical split' })
-vim.keymap.set('n', '<leader>th', '<CMD>split +Repl<CR>', { desc = 'Open REPL in horizontal split' })
-vim.keymap.set('n', '<leader>tr', '<CMD>Repl<CR>', { desc = 'Open REPL in current window' })
+-- ##############      OIL             ##########################
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+vim.keymap.set('n', '+', '<CMD>Oil --float<CR>', { desc = 'Open parent directory - in floating window' })
 
 
-vim.keymap.set('v', 's', function()
-  require('custom.plugins.term').send_visual()
+-- ##############      Kitty REPL             ##########################
+--
+
+vim.keymap.set('n', '<leader>tt', function()
+  require('custom.plugins.kitty_repl').new_repl()
+end, { desc = 'Open Kitty  REPL' })
+
+vim.keymap.set('v', '<A-s>', function()
+  require('custom.plugins.kitty_repl').send_visual()
 end, { desc = 'Send visual selection to REPL' })
 
 vim.keymap.set({ 'n', 'i' }, '<A-s>', function()
-  require('custom.plugins.term').send_line()
+  require('custom.plugins.kitty_repl').send_line()
 end, { desc = 'Send current line to REPL' })
 
 vim.keymap.set({ 'n' }, 's', function()
-  vim.go.operatorfunc = "v:lua.require'custom.plugins.term'.send_motion"
+  vim.go.operatorfunc = "v:lua.require'custom.plugins.kitty_repl'.send_motion"
   return 'g@'
 end, { expr = true, desc = 'Send lines to REPL using a motion' })
 
 vim.keymap.set('n', '<leader>6', 'six', {desc = "Send current code block to REPL"})
+
+
+-- -- ##############      Simple REPL             ##########################
+-- vim.api.nvim_create_user_command('Repl', function(opts)
+--   require('custom.plugins.term').toggle_repl()
+-- end, { range = false })
+--
+-- vim.keymap.set('n', '<leader>tv', '<CMD>vsplit +Repl<CR>', { desc = 'Open REPL in vertical split' })
+-- vim.keymap.set('n', '<leader>th', '<CMD>split +Repl<CR>', { desc = 'Open REPL in horizontal split' })
+-- vim.keymap.set('n', '<leader>tr', '<CMD>Repl<CR>', { desc = 'Open REPL in current window' })
+--
+--
+-- vim.keymap.set('v', 's', function()
+--   require('custom.plugins.term').send_visual()
+-- end, { desc = 'Send visual selection to REPL' })
+--
+-- vim.keymap.set({ 'n', 'i' }, '<A-s>', function()
+--   require('custom.plugins.term').send_line()
+-- end, { desc = 'Send current line to REPL' })
+--
+-- vim.keymap.set({ 'n' }, 's', function()
+--   vim.go.operatorfunc = "v:lua.require'custom.plugins.term'.send_motion"
+--   return 'g@'
+-- end, { expr = true, desc = 'Send lines to REPL using a motion' })
+--
+-- vim.keymap.set('n', '<leader>6', 'six', {desc = "Send current code block to REPL"})
+
+
+
+
 
 -- =========================================
 -- terminal
