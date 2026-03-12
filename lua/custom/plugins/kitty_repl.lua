@@ -1,3 +1,6 @@
+--- Custom plugin to interact with kitty terminal, and emulate a REPL terminal in between nvim and kitty terminal
+--- Coded by Hugo
+
 local M = {}
 
 M.current_repl = nil

@@ -21,6 +21,16 @@ function Map(mode, lhs, rhs, opts)
 end
 
 
+
+
+vim.keymap.set("n", "<leader>pt", function()
+	require('custom.plugins.toc').open_toc()
+end, { desc = "Python: Table of Contents" })
+
+
+
+
+
 vim.keymap.set({ 'n' }, '<leader>bd', function()
   require('custom.plugins.utils').destroy_buffer()
 end, { desc = 'Destroy current buffer but do not close its window' })
@@ -94,10 +104,6 @@ vim.keymap.set('n', '<leader>6', 'six', {desc = "Send current code block to REPL
 --
 -- vim.keymap.set('n', '<leader>6', 'six', {desc = "Send current code block to REPL"})
 
-
-
-
-
 -- =========================================
 -- terminal
 -- better terminal navigation
@@ -131,5 +137,5 @@ vim.keymap.set("n", "<leader>sv", "<cmd>vsplit<cr>", { desc = "split window vert
 vim.keymap.set("n", "<leader>sh", "<cmd>split<cr>", { desc = "split window horizontally" })
 vim.keymap.set("n", "<c-up>", "<cmd>resize +2<cr>", { desc = "increase window height" })
 vim.keymap.set("n", "<c-down>", "<cmd>resize -2<cr>", { desc = "decrease window height" })
-vim.keymap.set("n", "<c-left>", "<cmd>vertical resize -2<cr>", { desc = "decrease window width" })
-vim.keymap.set("n", "<c-right>", "<cmd>vertical resize +2<cr>", { desc = "increase window width" })
+vim.keymap.set("n", "<c-right>", "<cmd>vertical resize -2<cr>", { desc = "decrease window width" })
+vim.keymap.set("n", "<c-left>", "<cmd>vertical resize +2<cr>", { desc = "increase window width" })
