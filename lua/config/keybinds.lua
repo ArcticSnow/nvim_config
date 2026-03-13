@@ -23,7 +23,7 @@ end
 
 
 
-vim.keymap.set("n", "<leader>pt", function()
+vim.keymap.set("n", "<leader>ft", function()
 	require('custom.plugins.toc').open_toc()
 end, { desc = "Python: Table of Contents" })
 
