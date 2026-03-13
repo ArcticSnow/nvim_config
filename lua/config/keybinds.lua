@@ -20,12 +20,19 @@ function Map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, options)
 end
 
+-- ~/.config/nvim/lua/keymap.lua
+local templates = require("custom.plugins.templater")
 
+vim.keymap.set("n", "<leader>tm", function() templates.pick(templates.insert) end, {
+  noremap = true,
+  silent = true,
+  desc = "Insert template",
+})
 
 
 vim.keymap.set("n", "<leader>ft", function()
 	require('custom.plugins.toc').open_toc()
-end, { desc = "Python: Table of Contents" })
+end, { desc = "Table of Contents" })
 
 
 

@@ -1,0 +1,41 @@
+---
+title: "Example Python scrip"
+bibliography: references.bib
+---
+
+Example for how to use quarto to make a science project.
+
+The script below is using the Iris dataset [@Fisher1936]. 
+
+
+## scripting
+
+Load the required Python modules
+```{python}
+import xarray as xr
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+    
+```
+
+Plot the data
+
+```{python}
+df = pd.read_csv('../data/iris.csv')
+
+plt.figure()
+plt.scatter(df.sepal_length, df.sepal_width, c=df.petal_length)
+plt.colorbar(label='petal length (cm)')
+
+plt.xlabel('Sepal length (cm)')
+plt.ylabel('Sepal width (cm)')
+plt.show()
+```
+
+
+## References
+
+::: {#refs}
+:::
+

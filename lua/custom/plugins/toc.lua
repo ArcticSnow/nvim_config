@@ -94,30 +94,30 @@ end
 function M.open_toc()
   local filetype = vim.bo.filetype
   local items = {}
-  local prompt_title = "TOC"
+  local prompt_title = "Table of Content"
 
-  if filetype == "markdown" or filetype == "quarto" then
+  if  filetype == "markdown" or filetype == "quarto" then
     items = extract_markdown_headings()
-    prompt_title = filetype:upper() .. " TOC"
-  elseif filetype == "python" then
+    prompt_title =  filetype:upper() .. "file ToC"
+  elseif  filetype == "python" then
     items = extract_python_symbols()
-    prompt_title = "Python TOC"
-  elseif filetype == "lua" then
+    prompt_title = "Python file ToC"
+  elseif  filetype == "lua" then
     items = extract_lua_functions()
-    prompt_title = "Lua TOC"
-  elseif filetype == "fortran" then
+    prompt_title = "Lua file ToC"
+  elseif  filetype == "fortran" then
     items = extract_fortran_subroutines()
-    prompt_title = "Fortran TOC"
-  elseif filetype == "julia" then
+    prompt_title = "Fortran file ToC"
+  elseif  filetype == "julia" then
     items = extract_julia_functions()
-    prompt_title = "Julia TOC"
+    prompt_title = "Julia file ToC"
   else
-    vim.notify("Unsupported filetype for TOC: " .. filetype, vim.log.levels.WARN)
+    vim.notify("Unsupported  filetype forfile ToC: " .. filetype, vim.log.levels.WARN)
     return
   end
 
   if #items == 0 then
-    vim.notify("No TOC items found.", vim.log.levels.WARN)
+    vim.notify("Nofile ToC items found.", vim.log.levels.WARN)
     return
   end
 
