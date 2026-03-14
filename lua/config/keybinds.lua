@@ -21,12 +21,22 @@ function Map(mode, lhs, rhs, opts)
 end
 
 
+
+
 -- Search and insert bibtex citation
 vim.keymap.set("n", "<leader>rb", function() require("custom.plugins.bibtex_finder").search_and_insert() end, {
   noremap = true,
   silent = true,
   desc = "Insert BibTeX reference",
 })
+
+local docstring = require("custom.plugins.docstring")
+vim.keymap.set("n", "<leader>dc", function() docstring.generate() end, {
+  noremap = true,
+  silent = true,
+  desc = "Generate Python docstring",
+})
+
 
 
 -- ~/.config/nvim/lua/keymap.lua
