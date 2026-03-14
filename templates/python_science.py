@@ -12,3 +12,6 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 #=========
+
+
+def func(tes, a, b):
