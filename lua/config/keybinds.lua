@@ -20,6 +20,15 @@ function Map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, options)
 end
 
+
+-- Search and insert bibtex citation
+vim.keymap.set("n", "<leader>rb", function() require("custom.plugins.bibtex_finder").search_and_insert() end, {
+  noremap = true,
+  silent = true,
+  desc = "Insert BibTeX reference",
+})
+
+
 -- ~/.config/nvim/lua/keymap.lua
 local templates = require("custom.plugins.templater")
 
