@@ -3,12 +3,12 @@
 My NeoVim configuration. 
 
 TODO:
-- [ ] add AI agent
 - [x] make a command to move from code block next/previous in quarto file
 - [ ] make window borders a bit more obvious. 
-- [ ] Have the non-active windows of a slightly altered shade
+- [x] Have the non-active windows of a slightly altered shade
 - [ ] improve the "six" method to send code block to REPL bringing back the cursor to th same position
 - [ ] make the "six" method work while being in insert mode to
+- [ ] review bibtex insert code
 
 ## Keymap
 
@@ -30,14 +30,14 @@ Using MiniNvim, a codeblock textobject has a keymap of `x`
 
 ### Terminal
 
-- `<leader>tv` - Open terminal with a vertical split window
-- `<leader>th` - Open terminal with a horizontal split window 
-- `<leader>tr` - Open terminal in current window
+- `<leader>tt` - Open terminal with a vertical split window
 - `s` - send lines to terminal (normal and visual modes)
 - `<A-s>` - send current line to terminal in `insert` mode
 - `six` - send current codeblock to terminal
 
 ### Telescope
+
+#### Classical use of telescope
 
 - `<leader>ff` - find files in current working Directory
 - `<leader>fg` - fuzzy find files in working directory
@@ -46,6 +46,16 @@ Using MiniNvim, a codeblock textobject has a keymap of `x`
 - `<leader>fm` - fuzzy find files in github directory
 - `<leader>fo` - fuzzy find files in Obsidian vault
 - `<leader>fp` - fuzzy find files in PAPROG directory (specific to work computer)
+
+#### Custom made plugins using telescope 
+
+- `<leader>ft` - display and navigate the file table of content in telescope to 
+- `<leader>tm` - insert a file template. Templates located in .config/nvim/template
+- `<leader>bb` - search and insert bibtex reference from the Zotero library in a quarto file
+
+### Docstring
+
+- `<leader>dc` - generate Python docstring (Google style)
 
 
 ### quickfix

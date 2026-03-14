@@ -21,15 +21,14 @@ function Map(mode, lhs, rhs, opts)
 end
 
 
-
-
 -- Search and insert bibtex citation
-vim.keymap.set("n", "<leader>rb", function() require("custom.plugins.bibtex_finder").search_and_insert() end, {
+vim.keymap.set("n", "<leader>bb", function() require("custom.plugins.bibtex_finder").search_and_insert() end, {
   noremap = true,
   silent = true,
   desc = "Insert BibTeX reference",
 })
 
+-- Generate and insert Python docstring
 local docstring = require("custom.plugins.docstring")
 vim.keymap.set("n", "<leader>dc", function() docstring.generate() end, {
   noremap = true,
@@ -37,9 +36,7 @@ vim.keymap.set("n", "<leader>dc", function() docstring.generate() end, {
   desc = "Generate Python docstring",
 })
 
-
-
--- ~/.config/nvim/lua/keymap.lua
+-- Search and insert file templates
 local templates = require("custom.plugins.templater")
 
 vim.keymap.set("n", "<leader>tm", function() templates.pick(templates.insert) end, {
@@ -48,15 +45,12 @@ vim.keymap.set("n", "<leader>tm", function() templates.pick(templates.insert) en
   desc = "Insert template",
 })
 
-
+-- Display and navigate Table of Contents using Telescope
 vim.keymap.set("n", "<leader>ft", function()
 	require('custom.plugins.toc').open_toc()
 end, { desc = "Table of Contents" })
 
-
-
-
-
+-- Destroy current buffer without closing window
 vim.keymap.set({ 'n' }, '<leader>bd', function()
   require('custom.plugins.utils').destroy_buffer()
 end, { desc = 'Destroy current buffer but do not close its window' })
@@ -64,7 +58,6 @@ end, { desc = 'Destroy current buffer but do not close its window' })
 -- Indentation of mulitple line simplified
 vim.keymap.set("v", "<", "<gv", { noremap = true })
 vim.keymap.set("v", ">", ">gv", { noremap = true })
-
 
 -- Keymap to simplify interaction with quickfix
 vim.keymap.set("n", "]]", "<cmd>cnext<CR>", { silent = true })
@@ -81,9 +74,7 @@ vim.keymap.set("n", "<S-tab>","<cmd>bprevious<cr>", {noremap=true, desc = "Move 
 vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 vim.keymap.set('n', '+', '<CMD>Oil --float<CR>', { desc = 'Open parent directory - in floating window' })
 
-
 -- ##############      Kitty REPL             ##########################
---
 
 vim.keymap.set('n', '<leader>tt', function()
   require('custom.plugins.kitty_repl').new_repl()
