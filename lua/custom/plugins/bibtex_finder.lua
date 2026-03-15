@@ -43,6 +43,8 @@
 --      bib_file = "path/to/your/references.bib",
 --      citation_format = "[@%s]"  -- Quarto/Markdown citation format
 --    })
+-- 3. Export from Zotero, the library using the plugin BetterBibtex, than can continue to update the .bib file as new items are added to Zotero
+--
 --
 -- ================================================================
 
