@@ -60,8 +60,61 @@ Using MiniNvim, a codeblock textobject has a keymap of `x`
 
 ### quickfix
 
+## Installation
+
+To install the current config, we need to first clone the repository, install the terminal emulation Kitty (to work with a Python REPL).
+
+### Add various configuration
+The git repository contains three branches split in worktree to be accessible as all time by the copmuter and test anytime new config implementation.
+To do so, create the worktree on the local `~/.config/` folder as follow:
+
+```
+~/.config/nvim/             ----> master branch
+~/.config/nvim-dev/         ----> dev branch
+~/.config/nvim-test/        ----> test branch
+```
+
+To add worktree, use the command `git worktree add [path to create worktree] [branch]`. For instance, `git ../nvim-dev dev` from the master branch.
 
 
+
+In your bashrc create these alias to access the dev and test nvim configuration
+```bash
+# nvim alias and config
+#alias v='nvim'
+alias nvim-dev='NVIM_CONFIG=~/.config/nvim-dev NVIM_DATA=~/.local/share/nvim-dev nvim'
+alias nvim-test='NVIM_CONFIG=~/.config/nvim-test NVIM_DATA=~/.local/share/nvim-test nvim'
+
+# small interactive prompt to pick the nvim config
+vv() {
+  select config in main dev test
+  do NVIM_CONFIG=~/.config/nvim-$config NVIM_DATA=~/.local/share/nvim-$config nvim $@; break; done
+}
+```
+
+### Add Kitty terminal REPL for Nvim
+
+1. install kitty terminal (https://sw.kovidgoyal.net/kitty/)
+2. in the kitty config file add: map kitty_mod+f2 detach_window
+
+```
+map kitty_mod+f4 detach_window ask
+map kitty_mod+r start_resizing_window
+
+# see hlp below. Allows running terminal from nvim
+allow_remote_control yes
+listen_on unix:@mykitty
+enabled_layouts tall,stack
+
+# Keymap for interacting in between nvim and kitty windoe seamlessly, using the plugin:  https://github.com/knubie/vim-kitty-navigator
+map ctrl+j kitten pass_keys.py bottom ctrl+j
+map ctrl+k kitten pass_keys.py top    ctrl+k
+map ctrl+h kitten pass_keys.py left   ctrl+h
+map ctrl+l kitten pass_keys.py right  ctrl+l
+
+```
+
+3. Install in neovim the plugin:  https://github.com/knubie/vim-kitty-navigator
 
 
 
