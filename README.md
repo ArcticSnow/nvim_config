@@ -3,6 +3,8 @@
 My NeoVim configuration. 
 
 TODO:
+- [ ] make the bibtex plugin beimg able to choose any .bib file. 
+- [ ] make a custom command/plugin, that launch oil.nvim in a vertically split panel on the left, just like NvimTree. Remove nvimTree then. 
 - [x] make a command to move from code block next/previous in quarto file
 - [ ] make window borders a bit more obvious. 
 - [x] Have the non-active windows of a slightly altered shade
