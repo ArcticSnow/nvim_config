@@ -35,13 +35,34 @@ end
 local function extract_python_symbols()
   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
   local symbols = {}
+
   for lnum, line in ipairs(lines) do
-    if line:match("^%s*def%s+") or line:match("^%s*class%s+") or line:match("^%s*#%%\n#%s+") then
-      local indent = line:match("^%s*")
-      local level = math.floor(#indent / 2) + 1
-      table.insert(symbols, { line = line, lnum = lnum, display = line:match("^%s*(.-)%s*$") or line, level = level })
+    -- Check for function/class definitions
+    if line:match("^%s*def%s+") or line:match("^%s*class%s+") then
+      local indent = line:match("^%s*") or ""
+      local level = #indent / 2 + 1  -- Assuming 2 spaces per indentation level
+      local display = line:match("^%s*(.-)%s*$") or line
+      table.insert(symbols, {
+        line = line,
+        lnum = lnum,
+        display = display,
+        level = level
+      })
+    -- Check for cell separator pattern (#%% followed by #)
+    elseif  line:match("^%s*%#%%%%%s*") and
+           lines[lnum + 1]:match("^%s*%#%s*%-%-%-") then
+      local indent = line:match("^%s*") or ""
+      local level = #indent / 2 + 1
+      local display = lines[lnum + 1]
+      table.insert(symbols, {
+        line = line,
+        lnum = lnum,
+        display = display,
+        level = level
+      })
     end
   end
+
   return symbols
 end
 
