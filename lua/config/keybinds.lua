@@ -76,9 +76,13 @@ vim.keymap.set('n', '+', '<CMD>Oil --float<CR>', { desc = 'Open parent directory
 
 -- ##############      Kitty REPL             ##########################
 
-vim.keymap.set('n', '<leader>tt', function()
+vim.keymap.set('n', '<A-t>', function()
   require('custom.plugins.kitty_repl').new_repl()
 end, { desc = 'Open Kitty  REPL' })
+
+vim.keymap.set({'n', 'i'}, '<A-c>', function()
+  require('custom.plugins.kitty_repl').send_current_codeblock()
+end, { desc = 'Send current codeblock to REPL' })
 
 vim.keymap.set('v', '<A-s>', function()
   require('custom.plugins.kitty_repl').send_visual()

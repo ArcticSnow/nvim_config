@@ -51,32 +51,80 @@ local function extract_text(r_start, c_start, r_end, c_end)
   return word
 end
 
-M.get_codeblocks = function(start, stop, max_blocks)
+
+
+local function get_python_codeblocks()
   local codeblocks = {}
-  local parser = vim.treesitter.get_parser(0, 'markdown')
-  local tree = parser:parse()[1]
-  local query = vim.treesitter.query.parse(
-    'markdown',
-    [[
-      (fenced_code_block
-        (info_string (language) @language) @info
-        (code_fence_content) @content)
-    ]]
-  )
-  local num_blocks = 0
-  for pattern, match, metadata in query:iter_matches(tree:root(), 0, start, stop) do
-    num_blocks = num_blocks + 1
-    if max_blocks ~= nil and num_blocks > max_blocks then
-      break
+  local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local current_block = { start = 1, content = {} }
+  local in_block = false
+
+  for i, line in ipairs(lines) do
+    if line:match('^%s*%#%%%%s*$') then
+      if in_block then
+        table.insert(codeblocks, {
+          language = 'python',
+          executable_content = table.concat(current_block.content, '\n'),
+          start_line = current_block.start,
+          end_line = i - 1
+        })
+        current_block = { start = i + 1, content = {} }
+      else
+        in_block = true
+        current_block.start = i + 1
+      end
+    else
+      if in_block then
+        table.insert(current_block.content, line)
+      end
     end
-    local row_start, _, row_end, _ = match[3][1]:range()
-    local lines = vim.api.nvim_buf_get_lines(0, row_start, row_end, false)
-    local text = table.concat(lines, '\n')
-    local node_language = match[1][1]
-    local language = extract_text(node_language:range())
-    table.insert(codeblocks, { language = language, executable_content = text })
   end
+
+  -- Add the last block if exists
+  if in_block and #current_block.content > 0 then
+    table.insert(codeblocks, {
+      language = 'python',
+      executable_content = table.concat(current_block.content, '\n'),
+      start_line = current_block.start,
+      end_line = #lines
+    })
+  end
+
   return codeblocks
+end
+
+M.get_codeblocks = function(start, stop, max_blocks)
+   local codeblocks = {}
+    if vim.bo.filetype == 'python' then
+	codeblocks = get_python_codeblocks()
+    elseif vim.bo.filetype == 'qmd' or vim.bo.filetype == 'md' then
+
+      local parser = vim.treesitter.get_parser(0, 'markdown')
+      local tree = parser:parse()[1]
+      local query = vim.treesitter.query.parse(
+	'markdown',
+	[[
+	  (fenced_code_block
+	    (info_string (language) @language) @info
+	    (code_fence_content) @content)
+	]]
+      )
+      local num_blocks = 0
+      for pattern, match, metadata in query:iter_matches(tree:root(), 0, start, stop) do
+	num_blocks = num_blocks + 1
+	if max_blocks ~= nil and num_blocks > max_blocks then
+	  break
+	end
+	local row_start, _, row_end, _ = match[3][1]:range()
+	local lines = vim.api.nvim_buf_get_lines(0, row_start, row_end, false)
+	local text = table.concat(lines, '\n')
+	local node_language = match[1][1]
+	local language = extract_text(node_language:range())
+	table.insert(codeblocks, { language = language, executable_content = text })
+      end
+
+    end
+    return codeblocks
 end
 
 local function format_codeblock(codeblock_idx, codeblock)
@@ -91,6 +139,18 @@ M.send_codeblocks_before_cursor = function()
   local codeblocks = M.get_codeblocks(0, row)
   for codeblock_idx, codeblock in ipairs(codeblocks) do
     M.send(format_codeblock(codeblock_idx, codeblock))
+  end
+end
+
+M.send_current_codeblock = function()
+  local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+  local codeblocks = M.get_codeblocks(0, row + 1, 1)  -- Get only the current block
+
+  if #codeblocks > 0 then
+    M.send(format_codeblock(1, codeblocks[1]))
+  else
+    -- If no codeblock found, send current line instead
+    M.send_line()
   end
 end
 
