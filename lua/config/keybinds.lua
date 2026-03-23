@@ -21,6 +21,7 @@ function Map(mode, lhs, rhs, opts)
 end
 
 
+-- ##############      BibTeX Citation Module             ##########################
 -- Search and insert bibtex citation
 vim.keymap.set("n", "<leader>bb", function() require("custom.plugins.bibtex_finder").search_and_insert() end, {
   noremap = true,
@@ -28,6 +29,14 @@ vim.keymap.set("n", "<leader>bb", function() require("custom.plugins.bibtex_find
   desc = "Insert BibTeX reference",
 })
 
+
+-- Keymap to select bib file
+vim.keymap.set('n', '<leader>bz', function()
+  require('custom.plugins.bibtex_finder').select_bib_file()
+end, { desc = "Select BibTeX file" })
+
+
+-- ##############  Other Custom Nodules: docstrings, templates, ToC      ##########################
 -- Generate and insert Python docstring
 local docstring = require("custom.plugins.docstring")
 vim.keymap.set("n", "<leader>dc", function() docstring.generate() end, {
