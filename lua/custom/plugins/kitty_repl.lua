@@ -1,5 +1,32 @@
---- Custom plugin to interact with kitty terminal, and emulate a REPL terminal in between nvim and kitty terminal
---- Coded by Hugo
+--- ===============================================================
+--    Kitty REPL terminal 
+--
+--     Author: gulogulo
+--     Date: 2026-03-13
+--
+-- ================================================================
+-- TODO:
+--
+-- ================================================================
+-- -- Custom plugin to interact with kitty terminal, and emulate a REPL terminal in between nvim and kitty terminal
+--
+-- A lightweight module to open and send code to a REPL terminal. 
+-- 
+-- Specific functions for sending Python code to a Kitty terminal REPL.
+-- Supports both visual selection and code block execution via #%% markers or ```python``` in Quarto and Markdown files.
+--
+-- FEATURES
+-- --------
+-- - Send current line, visual selection, or motion-based selection to REPL
+-- - Detect Python code blocks separated by #%% markers
+-- - Fallback to TreeSitter for markdown code blocks
+-- - Maintains REPL connection across sessions
+--
+-- INSTALLATION
+-- ------------
+-- 1. Add to your Neovim config (e.g., `lua/plugins/kitty-repl.lua`)
+-- 2. Requires: Kitty terminal
+-- 3. 
 
 local M = {}
 

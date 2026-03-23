@@ -1,7 +1,11 @@
 --- Custom plugin to display a Table of Content (ToC) of the file
 --- Coded with the help of LeChat, Mistral
 --- S. Filhol
-
+---
+--- TODO:
+---  - [ ] exclude python code block from parsing for markdown and quarto files.
+---  - [ ] add color to telescope results 
+---
 
 
 local M = {}
