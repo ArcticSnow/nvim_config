@@ -8,7 +8,7 @@ return{
 	lazy = false,
 	config = function()
 	    require("themery").setup({
-		themes = {
+			themes = {
 		    {
 			name = "Everforest Dark",
 			colorscheme = "everforest",
@@ -71,7 +71,7 @@ return{
 	    require("everforest").setup({
 		-- Your config here
 	    })
-	end,
+	end
     },
     {
 	"folke/tokyonight.nvim",

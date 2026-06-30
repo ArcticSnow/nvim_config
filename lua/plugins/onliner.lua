@@ -15,4 +15,5 @@ return {
   },  
 
 { "rafamadriz/friendly-snippets" },
+    {"lewis6991/gitsigns.nvim"}
 }

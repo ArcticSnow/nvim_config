@@ -20,10 +20,12 @@ end)
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
 -- Minimal number of screen lines to keep above and below the cursor.
-set.scrolloff = 10
+-- set.scrolloff = 10
 set.sidescrolloff = 8 			-- Keep 10 line left or right of cursor
 set.backspace = "indent,eol,start"	-- Make backspace behave naturally
-set.wrap = false 			-- do not wrap lines 
+set.wrap = true 			-- wrap lines 
+set.breakindent = true			-- when wrapping, respect indentation
+set.linebreak = true			-- wrap at words end only
 set.spelllang = { "en", "fr" } -- Set language for spellchecking
 
 -- Save undo history
@@ -62,7 +64,7 @@ set.showcmd = true
 set.ignorecase = true		--ignore case while searching
 set.smartcase = true		--but do not ignore if caps are used
 set.incsearch = true            -- search as characters are entered
-set.hlsearch = false            -- do not highlight matches
+set.hlsearch = true            -- do not highlight matches
 
 -- Split behavior
 set.splitbelow = true 		-- Horizontal splits open below

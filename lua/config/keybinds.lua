@@ -106,7 +106,7 @@ vim.keymap.set({ 'n' }, 's', function()
   return 'g@'
 end, { expr = true, desc = 'Send lines to REPL using a motion' })
 
-vim.keymap.set('n', '<leader>6', 'six', {desc = "Send current code block to REPL"})
+vim.keymap.set('n', '<A-x>', 'six', {desc = "Send current code block to REPL"})
 
 
 -- -- ##############      Simple REPL             ##########################
