@@ -10,7 +10,7 @@ Description:
 """
 
 #%%
-#----- Import Librairies
+#======= Import Librairies ========
 
 import numpy as np
 import pandas as pd
@@ -19,7 +19,7 @@ from pathlib import Path
 
 
 #%%
-#---- code section ...
+#======= code section =======
 
 def func():
     print('test')
