@@ -213,7 +213,8 @@ return {
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
+        -- pyright = {},
+        ruff = {},
         fortls = {},
         html = {},
         julials = {},

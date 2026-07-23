@@ -25,6 +25,7 @@ set.sidescrolloff = 8 			-- Keep 10 line left or right of cursor
 set.backspace = "indent,eol,start"	-- Make backspace behave naturally
 set.wrap = true 			-- wrap lines 
 set.breakindent = true			-- when wrapping, respect indentation
+set.breakindentopt = 'shift:4'		-- add visual indent 
 set.linebreak = true			-- wrap at words end only
 set.spelllang = { "en", "fr" } -- Set language for spellchecking
 
@@ -40,7 +41,7 @@ set.writebackup = false 	-- do not create backup before overwriting
 set.shiftwidth = 4
 set.autoindent = true
 set.smarttab = true
-set.smartindent = true -- Smart auto-indenting
+set.smartindent = false -- Smart auto-indenting
 
 -- apearance
 set.termguicolors = false
