@@ -234,104 +234,96 @@ function M.open_toc()
   local actions = require("telescope.actions")
   local action_state = require("telescope.actions.state")
   local previewers = require("telescope.previewers")
-picker.new( {
+
+picker.new({}, {
   prompt_title = prompt_title,
   finder = finders.new_table({
     results = items,
-    entry_maker = function(entry)
+    entry_maker = function(entry, index)
       local icon = icons[entry.type] or icons.default
       local hl_group = hl_groups[entry.type] or hl_groups.default
       return {
-	value = entry,
-	display = entry.display,
-	-- Use line number as first sort key to preserve order
-	ordinal = string.format("%05d-%s", entry.lnum, entry.display),
-	lnum = entry.lnum,
-	filename = vim.api.nvim_buf_get_name(0),
-	bufnr = vim.api.nvim_get_current_buf(),
-	level = entry.level,
-	type = entry.type,
-	hl_group = hl_group,
-	icon = icon,
-	parent = entry.parent
+        value = entry,
+        display = entry.display,
+        -- Use index for guaranteed order (1, 2, 3...)
+        ordinal = tostring(index),
+        lnum = entry.lnum,
+        filename = vim.api.nvim_buf_get_name(0),
+        bufnr = vim.api.nvim_get_current_buf(),
+        level = entry.level,
+        type = entry.type,
+        hl_group = hl_group,
+        icon = icon,
+        parent = entry.parent
       }
     end,
   }),
-    sorter = conf.generic_sorter({}),
-    --sorter = require("telescope.sorting").none,
-    previewer = previewers.vim_buffer_vimgrep.new({}),
-    -- Custom display with colors, icons, and current position
-    entry_display = function(entry)
-      local current_line = vim.api.nvim_win_get_cursor(0)[1]
-      local indicator = entry.lnum == current_line and "→ " or "  "
+  -- Use Telescope's built-in sorter
+  sorter = conf.generic_sorter({}),
 
-      -- Breadcrumbs
-      local breadcrumbs = {}
-      local current = entry
-      while current do
-        table.insert(breadcrumbs, 1, current.display)
-        current = current.parent
+  entry_display = function(entry)
+    local current_line = vim.api.nvim_win_get_cursor(0)[1]
+    local indicator = entry.lnum == current_line and "→ " or "  "
+
+    -- Breadcrumbs
+    local breadcrumbs = {}
+    local current = entry
+    while current do
+      table.insert(breadcrumbs, 1, current.display)
+      current = current.parent
+    end
+    local breadcrumb_text = #breadcrumbs > 1 and table.concat(breadcrumbs, " > ") .. " > " or ""
+
+    return {
+      { indicator, "TelescopeResultsSpecialComment" },
+      { breadcrumb_text, "TelescopeResultsComment" },
+      { string.rep("  ", entry.level - 1), "TelescopeResultsComment" },
+      { entry.icon, entry.hl_group },
+      { " " .. entry.display, entry.hl_group },
+      { " (" .. entry.lnum .. ")", "TelescopeResultsComment" }
+    }
+  end,
+
+  previewer = previewers.vim_buffer_vimgrep.new({}),
+  attach_mappings = function(prompt_bufnr, map)
+    map("i", "<CR>", function()
+      local entry = action_state.get_selected_entry()
+      actions.close(prompt_bufnr)
+      if entry then
+        vim.api.nvim_win_set_cursor(0, { entry.lnum, 0 })
+        vim.cmd("normal! zz")
       end
-      local breadcrumb_text = #breadcrumbs > 1 and table.concat(breadcrumbs, " > ") .. " > " or ""
-
-      -- Main display
-      local icon = icons[entry.type] or icons.default
-      local display_text = string.rep("  ", entry.level - 1) .. icon .. entry.display
-
-      return {
-        { indicator, "TelescopeResultsSpecialComment" },
-        { breadcrumb_text, "TelescopeResultsComment" },
-        { display_text, entry.hl_group },
-        { " (" .. entry.lnum .. ")", "TelescopeResultsComment" }
-      }
-    end,
-    attach_mappings = function(prompt_bufnr, map)
-      -- Jump to selection
-      map("i", "<CR>", function()
-        local entry = action_state.get_selected_entry()
-        actions.close(prompt_bufnr)
-        if entry then
-          vim.api.nvim_win_set_cursor(0, { entry.lnum, 0 })
-          vim.cmd("normal! zz")
-        end
-      end)
-
-      -- Navigation with preview update
-      map("i", "<C-j>", function()
-        local entry = action_state.get_selected_entry()
-        if entry then
-          local previewer = action_state.get_current_picker(prompt_bufnr).previewer
-          pcall(function()
-            previewer.state.last_entry = entry
-            previewer:scroll_fn(entry.lnum)
-          end)
-        end
-        return actions.move_selection_next(prompt_bufnr)
-      end)
-
-      map("i", "<C-k>", function()
-        local entry = action_state.get_selected_entry()
-        if entry then
-          local previewer = action_state.get_current_picker(prompt_bufnr).previewer
-          pcall(function()
-            previewer.state.last_entry = entry
-            previewer:scroll_fn(entry.lnum)
-          end)
-        end
-        return actions.move_selection_previous(prompt_bufnr)
-      end)
-
-      return true
-    end,
-    -- Folding support
-    layout_strategy = 'flex',
-    layout_config = {
-      preview_cutoff = 1,
-      width = 0.4,
-      height = 0.8,
-      anchor = 'N',
-    },
-  }):find()
-end
-
+    end)
+    map("i", "<C-j>", function()
+      local entry = action_state.get_selected_entry()
+      if entry then
+        local previewer = action_state.get_current_picker(prompt_bufnr).previewer
+        pcall(function()
+          previewer.state.last_entry = entry
+          previewer:scroll_fn(entry.lnum)
+        end)
+      end
+      return actions.move_selection_next(prompt_bufnr)
+    end)
+    map("i", "<C-k>", function()
+      local entry = action_state.get_selected_entry()
+      if entry then
+        local previewer = action_state.get_current_picker(prompt_bufnr).previewer
+        pcall(function()
+          previewer.state.last_entry = entry
+          previewer:scroll_fn(entry.lnum)
+        end)
+      end
+      return actions.move_selection_previous(prompt_bufnr)
+    end)
+    return true
+  end,
+  layout_strategy = 'flex',
+  layout_config = {
+    preview_cutoff = 1,
+    width = 0.4,
+    height = 0.8,
+    anchor = 'N',
+  },
+}):find()end
 return M
