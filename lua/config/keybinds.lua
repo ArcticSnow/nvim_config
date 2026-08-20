@@ -169,3 +169,35 @@ vim.keymap.set("n", "<c-up>", "<cmd>resize +2<cr>", { desc = "increase window he
 vim.keymap.set("n", "<c-down>", "<cmd>resize -2<cr>", { desc = "decrease window height" })
 vim.keymap.set("n", "<c-right>", "<cmd>vertical resize -2<cr>", { desc = "decrease window width" })
 vim.keymap.set("n", "<c-left>", "<cmd>vertical resize +2<cr>", { desc = "increase window width" })
+
+-- =======================================================
+vim.keymap.set("n", "fi", "zi", {desc = "Toggle folding"})
+
+vim.keymap.set("n", "fa", "za", {desc = "Toggle fold under cursor"})
+vim.keymap.set("n", "fh", "[zjk",{desc = "go to start of fold"})
+vim.keymap.set("n", "fj", "zjkj",{desc = "go to next fold"})
+vim.keymap.set("n", "fk", "zk[z",{desc = "go to prev fold"})
+vim.keymap.set("n", "fl", "]zkj",{desc = "go to end of fold"})
+
+-- Keymaps for the plugin foldnav
+--
+-- vim.keymap.set("n", "<z-h>", function()
+--     require("foldnav").goto_start()
+-- end, {desc = "go to start of fold"})
+--
+-- vim.keymap.set("n", "<z-j>", function()
+--     require("foldnav").goto_next()
+-- end, {desc = "go to next fold"})
+--
+-- vim.keymap.set("n", "<z-k>", function()
+--     require("foldnav").goto_prev_start()
+-- end, {desc = "go to previous fold start"})
+--
+-- -- vim.keymap.set("n", "<z-k>", function() 
+-- -- 	require("foldnav").goto_prev_end() 
+-- -- end, {desc = "go to previous fold end"})
+--
+-- vim.keymap.set("n", "<z-l>", function()
+--     require("foldnav").goto_end()
+-- end, {desc = "Go to end of fold"})
+

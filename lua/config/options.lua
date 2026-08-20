@@ -50,7 +50,7 @@ set.termguicolors = true 				-- Enable 24-bit colors
 
 -- folding (use by default treesitter)
 set.foldmethod = "expr"   				-- use expression for folding 
-set.foldexpr = "nvim_treesitter#foldexpr()"   	-- use treesitter for folding
+set.foldexpr = "v:lua.vim.treesitter.foldexpr()"   	-- use treesitter for folding
 set.foldlevelstart = 99
 set.foldlevel = 20 					-- Keep all folds open by default
 set.foldenable = false
