@@ -9,7 +9,6 @@ local set = vim.opt
 set.number = true
 set.cursorline = true
 set.relativenumber = true
-set.foldmethod = "indent"  	-- by default use indetation for folding (type 'za' to toggle in 'n' mode)
 
 -- use OS clipboard
 vim.schedule(function()
@@ -43,14 +42,19 @@ set.autoindent = true
 set.smarttab = true
 set.smartindent = false -- Smart auto-indenting
 
--- apearance
+-- appearance
 set.termguicolors = false
 set.background = "dark"
 set.signcolumn = "yes"
-set.foldmethod = "expr"   				-- use expression for folding 
-set.foldexpr = "v:lua:vim.treesitter.foldexpr()"   	-- use treesitter for folding
-set.foldlevel = 99 					-- Keep all folds open by default
 set.termguicolors = true 				-- Enable 24-bit colors
+
+-- folding (use by default treesitter)
+set.foldmethod = "expr"   				-- use expression for folding 
+set.foldexpr = "nvim_treesitter#foldexpr()"   	-- use treesitter for folding
+set.foldlevelstart = 99
+set.foldlevel = 20 					-- Keep all folds open by default
+set.foldenable = false
+set.foldcolumn = "auto:9"
 
 set.wildignorecase = true 	-- Case-insensitive tab completion in commands
 

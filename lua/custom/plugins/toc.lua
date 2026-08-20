@@ -211,7 +211,6 @@ function M.open_toc()
   end
 
   -- Add parent-child relationships for breadcrumbs
-  local last_level = 0
   local stack = {}
   for _, item in ipairs(items) do
     -- Pop stack until we find parent
@@ -228,102 +227,131 @@ function M.open_toc()
     table.insert(stack, item)
   end
 
-  local picker = require("telescope.pickers")
+  -- Precompute a breadcrumb string per item by walking its parent chain once
+  for _, item in ipairs(items) do
+    local crumbs = {}
+    local current = item.parent
+    while current do
+      table.insert(crumbs, 1, current.display)
+      current = current.parent
+    end
+    item.breadcrumb = #crumbs > 0 and (table.concat(crumbs, " > ") .. " > ") or ""
+  end
+
+  local pickers = require("telescope.pickers")
   local finders = require("telescope.finders")
   local conf = require("telescope.config").values
   local actions = require("telescope.actions")
   local action_state = require("telescope.actions.state")
   local previewers = require("telescope.previewers")
+  local entry_display = require("telescope.pickers.entry_display")
 
-picker.new({}, {
-  prompt_title = prompt_title,
-  finder = finders.new_table({
-    results = items,
-    entry_maker = function(entry, index)
-      local icon = icons[entry.type] or icons.default
-      local hl_group = hl_groups[entry.type] or hl_groups.default
-      return {
-        value = entry,
-        display = entry.display,
-        -- Use index for guaranteed order (1, 2, 3...)
-        ordinal = tostring(index),
-        lnum = entry.lnum,
-        filename = vim.api.nvim_buf_get_name(0),
-        bufnr = vim.api.nvim_get_current_buf(),
-        level = entry.level,
-        type = entry.type,
-        hl_group = hl_group,
-        icon = icon,
-        parent = entry.parent
-      }
-    end,
-  }),
-  -- Use Telescope's built-in sorter
-  sorter = conf.generic_sorter({}),
+  -- Cap the breadcrumb column so long nesting doesn't push everything off-screen
+  local max_breadcrumb = 0
+  for _, item in ipairs(items) do
+    max_breadcrumb = math.max(max_breadcrumb, #item.breadcrumb)
+  end
+  max_breadcrumb = math.min(max_breadcrumb, 40)
 
-  entry_display = function(entry)
+  -- Build the displayer ONCE (outside entry_maker) — this is what was missing.
+  -- It returns a function that assembles colored segments into one display string.
+  local displayer = entry_display.create({
+    separator = "",
+    items = {
+      { width = 2 },              -- current-position indicator
+      { width = max_breadcrumb }, -- breadcrumb trail
+      { remaining = true },       -- indent + icon + title + (lnum)
+    },
+  })
+
+  local function make_display(entry)
     local current_line = vim.api.nvim_win_get_cursor(0)[1]
     local indicator = entry.lnum == current_line and "→ " or "  "
+    local indent = string.rep("  ", entry.level - 1)
+    local body = indent .. entry.icon .. entry.title .. " (" .. entry.lnum .. ")"
 
-    -- Breadcrumbs
-    local breadcrumbs = {}
-    local current = entry
-    while current do
-      table.insert(breadcrumbs, 1, current.display)
-      current = current.parent
-    end
-    local breadcrumb_text = #breadcrumbs > 1 and table.concat(breadcrumbs, " > ") .. " > " or ""
-
-    return {
+    return displayer({
       { indicator, "TelescopeResultsSpecialComment" },
-      { breadcrumb_text, "TelescopeResultsComment" },
-      { string.rep("  ", entry.level - 1), "TelescopeResultsComment" },
-      { entry.icon, entry.hl_group },
-      { " " .. entry.display, entry.hl_group },
-      { " (" .. entry.lnum .. ")", "TelescopeResultsComment" }
-    }
-  end,
+      { entry.breadcrumb, "TelescopeResultsComment" },
+      { body, entry.hl_group },
+    })
+  end
 
-  previewer = previewers.vim_buffer_vimgrep.new({}),
-  attach_mappings = function(prompt_bufnr, map)
-    map("i", "<CR>", function()
-      local entry = action_state.get_selected_entry()
-      actions.close(prompt_bufnr)
-      if entry then
-        vim.api.nvim_win_set_cursor(0, { entry.lnum, 0 })
-        vim.cmd("normal! zz")
-      end
-    end)
-    map("i", "<C-j>", function()
-      local entry = action_state.get_selected_entry()
-      if entry then
-        local previewer = action_state.get_current_picker(prompt_bufnr).previewer
-        pcall(function()
-          previewer.state.last_entry = entry
-          previewer:scroll_fn(entry.lnum)
-        end)
-      end
-      return actions.move_selection_next(prompt_bufnr)
-    end)
-    map("i", "<C-k>", function()
-      local entry = action_state.get_selected_entry()
-      if entry then
-        local previewer = action_state.get_current_picker(prompt_bufnr).previewer
-        pcall(function()
-          previewer.state.last_entry = entry
-          previewer:scroll_fn(entry.lnum)
-        end)
-      end
-      return actions.move_selection_previous(prompt_bufnr)
-    end)
-    return true
-  end,
-  layout_strategy = 'flex',
-  layout_config = {
-    preview_cutoff = 1,
-    width = 0.4,
-    height = 0.8,
-    anchor = 'N',
-  },
-}):find()end
+  local picker = pickers.new({}, {
+    prompt_title = prompt_title,
+    -- Fixes the reversed ordering: makes item #1 render at the top of the list.
+    sorting_strategy = "ascending",
+
+    finder = finders.new_table({
+      results = items,
+      entry_maker = function(item, index)
+        local icon = icons[item.type] or icons.default
+        local hl_group = hl_groups[item.type] or hl_groups.default
+        return {
+          value = item,
+          -- Search by title text instead of by row index, so typing filters meaningfully.
+          ordinal = item.breadcrumb .. item.display,
+          lnum = item.lnum,
+          filename = vim.api.nvim_buf_get_name(0),
+          bufnr = vim.api.nvim_get_current_buf(),
+          level = item.level,
+          type = item.type,
+          hl_group = hl_group,
+          icon = icon,
+          title = item.display,
+          breadcrumb = item.breadcrumb,
+          -- IMPORTANT: display must be a function that returns (string, highlights)
+          -- when you want per-segment coloring. A plain string can't be colored.
+          display = make_display,
+        }
+      end,
+    }),
+    -- Use Telescope's built-in sorter
+    sorter = conf.generic_sorter({}),
+
+    previewer = previewers.vim_buffer_vimgrep.new({}),
+    attach_mappings = function(prompt_bufnr, map)
+      map("i", "<CR>", function()
+        local entry = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        if entry then
+          vim.api.nvim_win_set_cursor(0, { entry.lnum, 0 })
+          vim.cmd("normal! zz")
+        end
+      end)
+      map("i", "<C-j>", function()
+        local entry = action_state.get_selected_entry()
+        if entry then
+          local previewer = action_state.get_current_picker(prompt_bufnr).previewer
+          pcall(function()
+            previewer.state.last_entry = entry
+            previewer:scroll_fn(entry.lnum)
+          end)
+        end
+        return actions.move_selection_next(prompt_bufnr)
+      end)
+      map("i", "<C-k>", function()
+        local entry = action_state.get_selected_entry()
+        if entry then
+          local previewer = action_state.get_current_picker(prompt_bufnr).previewer
+          pcall(function()
+            previewer.state.last_entry = entry
+            previewer:scroll_fn(entry.lnum)
+          end)
+        end
+        return actions.move_selection_previous(prompt_bufnr)
+      end)
+      return true
+    end,
+    layout_strategy = 'flex',
+    layout_config = {
+      preview_cutoff = 1,
+      width = 0.4,
+      height = 0.8,
+      anchor = 'N',
+    },
+  })
+  picker:find()
+end
+
 return M
