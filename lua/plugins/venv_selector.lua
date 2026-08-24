@@ -13,6 +13,29 @@ return {
 	    command = "find python$ ~/anaconda3/",
 	}
 	}, -- if you add your own searches, they go here.
-      options = {} -- if you add plugin options, they go here.
+      options = {
+	    activate_venv_in_terminal = true,
+	    set_environment_variables = true,
+	    require_lsp_activation = true,
+
+	    enable_default_searches = true,
+	    search_timeout = 5,
+
+	    -- User interface
+	    notify_user_on_venv_activation = true,
+	    debug = false,
+	    -- Picker configuration
+	    picker = "telescope",
+
+	    on_telescope_result_callback = function(results)
+		-- Custom telescope result formatting
+		for _, result in ipairs(results) do
+		  result.display = "🚀 " .. result.display
+		end
+		return results
+	    end,
+
+	} -- if you add plugin options, they go here.
+
   },
 }
