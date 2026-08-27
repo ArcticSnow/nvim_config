@@ -26,23 +26,23 @@
 -- ------------
 -- 1. Add to your Neovim config (e.g., `lua/plugins/kitty-repl.lua`)
 -- 2. Requires: Kitty terminal
--- 3. 
+-- 3.
 
 
 
 local M = {}
- 
+
 M.current_repl = nil  -- Stores { id = number, type = "window" }
- 
+
 ---
 --- Start a new Kitty terminal window.
 ---
 M.new_repl = function()
   M.current_repl = tonumber(vim.fn.system('kitty @ launch --type window --cwd current --title repl'))
 end
- 
- 
- 
+
+
+
 ---
 --- Open a new Kitty window with an IPython REPL (using the 'generic' profile)
 --- in Neovim's current working directory, using the active Python virtual environment.
@@ -51,7 +51,7 @@ M.new_python_repl = function()
   local profile = "science"
   local ipython_path
   local cwd = vim.fn.getcwd()  -- Use buffer's directory or fall back to CWD
- 
+
   -- Try to get the virtual environment path
   local venv_path
   if vim.g.python3_host_prog and vim.g.python3_host_prog ~= "" then
@@ -59,7 +59,7 @@ M.new_python_repl = function()
   else
     venv_path = os.getenv("VIRTUAL_ENV")
   end
- 
+
   -- If a venv is detected, check if it has IPython
   if venv_path then
     ipython_path = venv_path .. "/bin/ipython"
@@ -67,24 +67,24 @@ M.new_python_repl = function()
       ipython_path = nil  -- IPython not in venv
     end
   end
- 
+
   -- Fall back to global IPython if venv lacks it
   if not ipython_path then
     ipython_path = vim.fn.executable("ipython") == 1 and "ipython" or nil
   end
- 
+
   -- Final fallback to Python if IPython is missing
   if not ipython_path then
     ipython_path = "python"
     profile = nil  -- No profile for plain Python
   end
- 
+
   -- Build the command: executable + profile flag (if applicable)
   local cmd_parts = { ipython_path }
   if profile then
     table.insert(cmd_parts, "--profile=" .. profile)
   end
- 
+
   -- Escape each part individually and join with spaces
   local escaped_cmd = ""
   for i, part in ipairs(cmd_parts) do
@@ -93,7 +93,7 @@ M.new_python_repl = function()
     end
     escaped_cmd = escaped_cmd .. vim.fn.shellescape(part)
   end
- 
+
   -- Launch Kitty with the correct CWD and command
   M.current_repl = tonumber(vim.fn.system(
     string.format(
@@ -104,9 +104,9 @@ M.new_python_repl = function()
     )
   ))
 end
- 
- 
- 
+
+
+
 ---
 --- Check if a Python process is running in the current REPL window.
 --- Uses pure Lua JSON parsing (no external dependencies like `jq`).
@@ -126,14 +126,14 @@ M.is_python_running_in_repl = function()
   if not M.current_repl then
     return false
   end
- 
+
   local output = vim.fn.system('kitty @ ls')
   local ok, os_windows = pcall(vim.json.decode, output)
   if not ok then
     vim.notify("Failed to decode `kitty @ ls` output", vim.log.levels.ERROR)
     return false
   end
- 
+
   for _, os_window in ipairs(os_windows) do
     for _, tab in ipairs(os_window.tabs or {}) do
       for _, win in ipairs(tab.windows or {}) do
@@ -150,32 +150,39 @@ M.is_python_running_in_repl = function()
       end
     end
   end
- 
+
   return false
 end
- 
+
 --- Send text to the REPL, with optional language check.
 --- @param text string: The text to send.
 --- @param language string|nil: The language of the code (defaults to current buffer's filetype).
 ---
-M.send = function(text, language)
-  -- Default to the current buffer's filetype if no language is provided
+ M.send = function(text, language)
   language = language or vim.bo.filetype
- 
-  -- Only check for Python if the language is Python
+
   if language == "python" and not M.is_python_running_in_repl() then
-    vim.notify(
-      "No Python console is running in the terminal. Start it manually first.",
-      vim.log.levels.WARN
-    )
+    vim.notify("No Python console is running in the terminal. Start it manually first.", vim.log.levels.WARN)
     return
   end
- 
-  -- Original send logic
-  text = text:gsub('[\r\n]+', '\n'):gsub('\n%s*\n', '\n'):gsub('^\n+', ''):gsub('\n+$', ''):gsub('\n', '\\n'):gsub('"', '\\"')
-  vim.fn.system(string.format('kitty @ send-text --match id:%s "%s"', M.current_repl, text .. '\\n\\n'))
+  if not M.current_repl then
+    vim.notify("No REPL window set.", vim.log.levels.WARN)
+    return
+  end
+
+  text = text:gsub('[\r\n]+', '\n'):gsub('\n%s*\n', '\n'):gsub('^\n+', ''):gsub('\n+$', ''):gsub('\n', '\\n')
+
+  local result = vim.fn.system({
+    'kitty', '@', 'send-text',
+    '--match', 'id:' .. tostring(M.current_repl),
+    text .. '\\n\\n',
+  })
+  if vim.v.shell_error ~= 0 then
+    vim.notify('kitty send-text failed: ' .. result, vim.log.levels.ERROR)
+  end
 end
- 
+
+
 ---
 --- Send the current line to the REPL.
 ---
@@ -185,7 +192,7 @@ M.send_line = function()
   local content = table.concat(lines, '\n')
   M.send(content)
 end
- 
+
 ---
 --- Send the visual selection to the REPL.
 ---
@@ -194,7 +201,7 @@ M.send_visual = function()
   local selection = vim.fn.getreg('z')
   M.send(selection)
 end
- 
+
 ---
 --- Send text from a motion to the REPL.
 ---
@@ -210,7 +217,7 @@ M.send_motion = function(motion)
   local content = table.concat(lines, '\n')
   M.send(content)
 end
- 
+
 ---
 --- Extract text from a range.
 ---
@@ -218,7 +225,7 @@ local function extract_text(r_start, c_start, r_end, c_end)
   local line = vim.api.nvim_buf_get_lines(0, r_start, r_start + 1, false)[1]
   return string.sub(line, c_start + 1, c_end + 1)
 end
- 
+
 ---
 --- Parse Python code blocks from the buffer.
 ---
@@ -227,7 +234,7 @@ local function get_python_codeblocks()
   local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
   local current_block = { start = 1, content = {} }
   local in_block = false
- 
+
   for i, line in ipairs(lines) do
     if line:match('^%s*#%%%s*$') then
       if in_block then
@@ -248,7 +255,7 @@ local function get_python_codeblocks()
       end
     end
   end
- 
+
   if in_block and #current_block.content > 0 then
     table.insert(codeblocks, {
       language = 'python',
@@ -257,10 +264,10 @@ local function get_python_codeblocks()
       end_line = #lines
     })
   end
- 
+
   return codeblocks
 end
- 
+
 ---
 --- Get code blocks from the buffer (Python, Markdown, or Quarto).
 ---
@@ -295,7 +302,7 @@ M.get_codeblocks = function(start, stop, max_blocks)
   end
   return codeblocks
 end
- 
+
 ---
 --- Format a code block for sending to the REPL.
 ---
@@ -307,7 +314,7 @@ local function format_codeblock(codeblock_idx, codeblock)
     codeblock.executable_content
   )
 end
- 
+
 ---
 --- Send all code blocks before the cursor to the REPL.
 ---
@@ -318,14 +325,14 @@ M.send_codeblocks_before_cursor = function()
     M.send(format_codeblock(codeblock_idx, codeblock), codeblock.language)
   end
 end
- 
+
 ---
 --- Send the current code block to the REPL.
 ---
 M.send_current_codeblock = function()
   local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
   local codeblocks = M.get_codeblocks(0, row + 1, 1)  -- Get only the current block
- 
+
   if #codeblocks > 0 then
     M.send(format_codeblock(1, codeblocks[1]), codeblocks[1].language)
   else
