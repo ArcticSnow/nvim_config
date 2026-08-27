@@ -89,6 +89,12 @@ vim.keymap.set('n', '<A-t>', function()
   require('custom.plugins.kitty_repl').new_repl()
 end, { desc = 'Open Kitty  REPL' })
 
+vim.keymap.set('n', '<A-p>', function()
+  require('custom.plugins.kitty_repl').new_python_repl()
+end, { desc = 'Open Kitty  REPL' })
+
+
+
 vim.keymap.set({'n', 'i'}, '<A-c>', function()
   require('custom.plugins.kitty_repl').send_current_codeblock()
 end, { desc = 'Send current codeblock to REPL' })
@@ -189,7 +195,7 @@ vim.keymap.set("n", "fl", "]zkj",{desc = "go to end of fold"})
 -- ===========================================================
 
 -- Personalized adaptation of classical Vim motion
-vim.keymap.set('n', '{', 'k{j', {desc="go to first line of previous paragraph"})  -- go to first line of previous paragraph
-vim.keymap.set('n', '}', '}j', {desc="go to first line of next paragraph"})  -- got to first line of next paragraph
+vim.keymap.set('n', '{', 'k{j_', {desc="go to first line of previous paragraph"})  -- go to first line of previous paragraph
+vim.keymap.set('n', '}', '}j_', {desc="go to first line of next paragraph"})  -- got to first line of next paragraph
 
 vim.keymap.set('v', 'p', 'ip', {desc="select inside paragraph"})  -- shorten vip to vp to select paragraph. can be used vppp to select subsequent paragraph
