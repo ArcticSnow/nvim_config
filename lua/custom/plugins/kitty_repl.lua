@@ -139,7 +139,7 @@ M.repl_status = function()
     'Project %s -> REPL %d (%s)',
     cwd,
     id,
-    (info and info.title) or win.title or '?'
+    win.title or (info and info.title) or '?'
   ), vim.log.levels.INFO)
 end
 
@@ -175,12 +175,44 @@ M.select_repl = function()
 end
 
 ---
+--- Short, human-friendly project label from a cwd: just the last path
+--- component, e.g. "/home/me/projects/foo" -> "foo". Used to make REPL
+--- window titles identifiable at a glance in kitty's tab bar and in
+--- select_repl()'s picker.
+---
+local function project_name(cwd)
+  local name = vim.fn.fnamemodify(cwd, ':t')
+  return name ~= '' and name or cwd
+end
+
+---
+--- Rename an existing kitty window. We can't know a window's id until
+--- AFTER `kitty @ launch` returns it, so any title that needs to include
+--- the id gets set here, as a second step, rather than via `--title` at
+--- launch time.
+---
+local function set_kitty_title(id, title)
+  local result = vim.fn.system({ 'kitty', '@', 'set-window-title', '--match', 'id:' .. tostring(id), title })
+  if vim.v.shell_error ~= 0 then
+    vim.notify('Failed to set REPL window title: ' .. result, vim.log.levels.WARN)
+  end
+end
+
+---
 --- Start a new Kitty terminal window and bind it to the current project.
+--- The window is renamed after launch to "repl#<id>:<project>" so it's
+--- identifiable in kitty's tab bar and in select_repl()'s picker.
 ---
 M.new_repl = function()
   local cwd = get_project_cwd()
   local id = tonumber(vim.fn.system('kitty @ launch --type window --cwd current --title repl'))
-  register_repl(id, 'repl', cwd)
+  if not id then
+    vim.notify('Failed to launch kitty REPL window.', vim.log.levels.ERROR)
+    return
+  end
+  local title = string.format('repl#%d:%s', id, project_name(cwd))
+  set_kitty_title(id, title)
+  register_repl(id, title, cwd)
 end
 
 
@@ -289,15 +321,24 @@ M.new_python_repl = function()
   end
 
   -- Launch Kitty with the correct CWD and command
-  local title = "ipython-" .. (profile or "default")
   local id = tonumber(vim.fn.system(
     string.format(
       'kitty @ launch --type window --cwd %s --title %s %s',
       vim.fn.shellescape(cwd),
-      vim.fn.shellescape(title),
+      vim.fn.shellescape('repl'),
       escaped_cmd
     )
   ))
+  if not id then
+    vim.notify('Failed to launch kitty IPython REPL window.', vim.log.levels.ERROR)
+    return
+  end
+
+  -- "ipython-science#3:myproject" if we launched ipython with a profile,
+  -- "python#4:myproject" if we fell all the way back to plain python.
+  local exe_label = ipython_path:match('ipython') and ('ipython-' .. (profile or 'default')) or 'python'
+  local title = string.format('%s#%d:%s', exe_label, id, project_name(cwd))
+  set_kitty_title(id, title)
   register_repl(id, title, cwd)
 end
 
