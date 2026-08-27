@@ -20,50 +20,239 @@
 -- - Send current line, visual selection, or motion-based selection to REPL
 -- - Detect Python code blocks separated by #%% markers
 -- - Fallback to TreeSitter for markdown code blocks
--- - Maintains REPL connection across sessions
+-- - Multiple REPLs: each project (cwd) is bound to its own kitty REPL
+--   window, so any buffer in that project sends to the same REPL
+-- - Bracketed-paste sends so multi-line blocks (loops, defs, etc.) don't
+--   desync indentation or get cut short by a blank line
 --
 -- INSTALLATION
 -- ------------
 -- 1. Add to your Neovim config (e.g., `lua/plugins/kitty-repl.lua`)
 -- 2. Requires: Kitty terminal
--- 3.
-
+-- 3. 
 
 
 local M = {}
 
-M.current_repl = nil  -- Stores { id = number, type = "window" }
+-- All REPLs this session knows about, keyed by kitty window id.
+-- Each entry: { id = number, title = string, cwd = string }
+M.repls = {}
+
+-- Which repl id each project is currently bound to: { [cwd] = repl_id }
+M.cwd_repl = {}
 
 ---
---- Start a new Kitty terminal window.
+--- The "project" a buffer belongs to, for REPL-binding purposes. Uses the
+--- effective cwd for the current window (respects :lcd/:tcd if set, falls
+--- back to the global cwd otherwise), so all buffers opened under the same
+--- project directory share one REPL.
+---
+local function get_project_cwd()
+  return vim.fn.getcwd(0)
+end
+
+-- Bracketed-paste escape codes. Wrapping a multi-line send in these tells
+-- the terminal app (ipython/python's readline/prompt_toolkit) to treat the
+-- whole block as a single paste rather than line-by-line keystrokes, which
+-- is what causes autoindent double-indenting and blank-line block breakage.
+local BP_START = '\27[200~'
+local BP_END = '\27[201~'
+
+---
+--- Flatten `kitty @ ls` (os_windows -> tabs -> windows) into a plain list
+--- of window objects. Reflects ALL kitty windows currently open, not just
+--- ones this Neovim session launched, so you can reattach to a REPL that
+--- was started before Neovim (or before a restart).
+---
+local function list_kitty_windows()
+  local output = vim.fn.system('kitty @ ls')
+  if vim.v.shell_error ~= 0 then
+    return {}
+  end
+  local ok, os_windows = pcall(vim.json.decode, output)
+  if not ok then
+    return {}
+  end
+  local windows = {}
+  for _, os_window in ipairs(os_windows) do
+    for _, tab in ipairs(os_window.tabs or {}) do
+      for _, win in ipairs(tab.windows or {}) do
+        table.insert(windows, win)
+      end
+    end
+  end
+  return windows
+end
+
+---
+--- Find a single kitty window object by id (nil if not found / kitty
+--- window has been closed).
+---
+local function find_kitty_window(id)
+  for _, win in ipairs(list_kitty_windows()) do
+    if win.id == id then
+      return win
+    end
+  end
+  return nil
+end
+
+---
+--- Record a repl's metadata and bind it to a project cwd (defaults to the
+--- current project cwd).
+---
+local function register_repl(id, title, cwd)
+  if not id then
+    return nil
+  end
+  cwd = cwd or get_project_cwd()
+  M.repls[id] = { id = id, title = title, cwd = cwd }
+  M.cwd_repl[cwd] = id
+  return id
+end
+
+---
+--- Get the repl id bound to the current project (cwd), or nil if none.
+---
+M.get_current_repl = function()
+  return M.cwd_repl[get_project_cwd()]
+end
+
+---
+--- Print (via vim.notify) which repl the current project (cwd) is bound to.
+--- Handy sanity check when juggling several REPLs across projects.
+---
+M.repl_status = function()
+  local cwd = get_project_cwd()
+  local id = M.cwd_repl[cwd]
+  if not id then
+    vim.notify('No REPL bound to project: ' .. cwd, vim.log.levels.INFO)
+    return
+  end
+  local info = M.repls[id]
+  local win = find_kitty_window(id)
+  if not win then
+    vim.notify(string.format('Project %s bound to REPL %d, but that kitty window no longer exists.', cwd, id), vim.log.levels.WARN)
+    return
+  end
+  vim.notify(string.format(
+    'Project %s -> REPL %d (%s)',
+    cwd,
+    id,
+    (info and info.title) or win.title or '?'
+  ), vim.log.levels.INFO)
+end
+
+---
+--- Let the user pick which kitty window the current project's REPL
+--- commands go to. Lists every kitty window currently open (not just ones
+--- tracked in M.repls), so this also works for reattaching after
+--- restarting Neovim, or for pointing two projects at the same REPL.
+---
+M.select_repl = function()
+  local windows = list_kitty_windows()
+  if #windows == 0 then
+    vim.notify('No kitty windows found.', vim.log.levels.WARN)
+    return
+  end
+
+  vim.ui.select(windows, {
+    prompt = 'Select REPL window for ' .. get_project_cwd() .. ':',
+    format_item = function(win)
+      local tracked = M.repls[win.id] and '  [tracked]' or ''
+      local cwd_hint = win.cwd and ('  (' .. win.cwd .. ')') or ''
+      return string.format('%d: %-20s (pid %s)%s%s', win.id, win.title or '?', tostring(win.pid), cwd_hint, tracked)
+    end,
+  }, function(choice)
+    if not choice then
+      return
+    end
+    -- Bind to the current project cwd, regardless of the kitty window's
+    -- own cwd -- what matters here is which project you want it to serve.
+    register_repl(choice.id, choice.title, get_project_cwd())
+    vim.notify('Bound project ' .. get_project_cwd() .. ' to REPL ' .. choice.id, vim.log.levels.INFO)
+  end)
+end
+
+---
+--- Start a new Kitty terminal window and bind it to the current project.
 ---
 M.new_repl = function()
-  M.current_repl = tonumber(vim.fn.system('kitty @ launch --type window --cwd current --title repl'))
+  local cwd = get_project_cwd()
+  local id = tonumber(vim.fn.system('kitty @ launch --type window --cwd current --title repl'))
+  register_repl(id, 'repl', cwd)
 end
 
 
 
 ---
+--- Locate a Python virtualenv/conda env for a given project directory.
+---   1. A local venv folder inside cwd (.venv, venv, .env, env)
+---   2. $CONDA_PREFIX -- the active conda env in the shell that launched
+---      Neovim. Conda doesn't set $VIRTUAL_ENV, so this needs its own check.
+---   3. $VIRTUAL_ENV -- the venv active in the shell that launched Neovim
+---      (this is what most LSP setups auto-detect too)
+---   4. python3_host_prog -- LOWEST priority on purpose: this is commonly
+---      pinned to a separate venv dedicated to Neovim's own :python3
+---      provider, unrelated to whatever project you're working in. Trusting
+---      it first is what caused new_python_repl() to ignore an actually-
+---      active project venv.
+--- Returns the venv root (no trailing slash) and a short label saying
+--- where it came from, or nil, nil if nothing was found.
+---
+local function find_venv_path(cwd)
+  local candidates = { '.venv', 'venv', '.env', 'env' }
+  for _, name in ipairs(candidates) do
+    local path = cwd .. '/' .. name
+    if vim.fn.isdirectory(path .. '/bin') == 1 then
+      return path, 'local folder ' .. name
+    end
+  end
+
+  local conda_prefix = os.getenv("CONDA_PREFIX")
+  if conda_prefix and conda_prefix ~= "" then
+    return conda_prefix, 'CONDA_PREFIX'
+  end
+
+  local env_venv = os.getenv("VIRTUAL_ENV")
+  if env_venv and env_venv ~= "" then
+    return env_venv, 'VIRTUAL_ENV'
+  end
+
+  if vim.g.python3_host_prog and vim.g.python3_host_prog ~= "" then
+    -- python3_host_prog points at the interpreter itself, e.g.
+    -- ".../.venv/bin/python3" -- strip "/bin/<exe>" to get the venv root.
+    local dir = vim.g.python3_host_prog:match("^(.*)/bin/[^/]+$")
+    if dir then
+      return dir, 'python3_host_prog'
+    end
+  end
+
+  return nil, nil
+end
+
+---
 --- Open a new Kitty window with an IPython REPL (using the 'generic' profile)
---- in Neovim's current working directory, using the active Python virtual environment.
+--- in Neovim's current working directory. Prefers a venv local to the
+--- current project, then $CONDA_PREFIX, then $VIRTUAL_ENV, then
+--- python3_host_prog, then a global interpreter (see find_venv_path).
+--- Binds the new window to the current project (cwd).
 ---
 M.new_python_repl = function()
   local profile = "science"
   local ipython_path
-  local cwd = vim.fn.getcwd()  -- Use buffer's directory or fall back to CWD
+  local cwd = get_project_cwd()
 
-  -- Try to get the virtual environment path
-  local venv_path
-  if vim.g.python3_host_prog and vim.g.python3_host_prog ~= "" then
-    venv_path = vim.g.python3_host_prog:match("^(.*/)[^/]+$")
-  else
-    venv_path = os.getenv("VIRTUAL_ENV")
-  end
+  local venv_path, venv_source = find_venv_path(cwd)
 
   -- If a venv is detected, check if it has IPython
   if venv_path then
     ipython_path = venv_path .. "/bin/ipython"
     if vim.fn.filereadable(ipython_path) ~= 1 then
+      vim.notify(
+        string.format('Found venv via %s (%s) but no ipython there -- falling back.', venv_source, venv_path),
+        vim.log.levels.WARN
+      )
       ipython_path = nil  -- IPython not in venv
     end
   end
@@ -78,6 +267,11 @@ M.new_python_repl = function()
     ipython_path = "python"
     profile = nil  -- No profile for plain Python
   end
+
+  vim.notify(
+    string.format('Launching %s%s', ipython_path, venv_path and (' (venv via ' .. venv_source .. ': ' .. venv_path .. ')') or ' (no venv detected)'),
+    vim.log.levels.INFO
+  )
 
   -- Build the command: executable + profile flag (if applicable)
   local cmd_parts = { ipython_path }
@@ -95,93 +289,100 @@ M.new_python_repl = function()
   end
 
   -- Launch Kitty with the correct CWD and command
-  M.current_repl = tonumber(vim.fn.system(
+  local title = "ipython-" .. (profile or "default")
+  local id = tonumber(vim.fn.system(
     string.format(
-      'kitty @ launch --type window --cwd %s --title ipython-%s %s',
+      'kitty @ launch --type window --cwd %s --title %s %s',
       vim.fn.shellescape(cwd),
-      profile or "default",
+      vim.fn.shellescape(title),
       escaped_cmd
     )
   ))
+  register_repl(id, title, cwd)
 end
 
 
 
 ---
---- Check if a Python process is running in the current REPL window.
---- Uses pure Lua JSON parsing (no external dependencies like `jq`).
+--- Check if a Python process is running in the given (or current project's)
+--- REPL window. Checks `foreground_processes` (what's actually running in
+--- the pane right now) rather than the window's original launch pid, so it
+--- still works if Python/IPython was started manually after the window was
+--- opened as a plain shell.
 ---
---- `kitty @ ls` returns a NESTED structure: a list of OS windows, each with
---- a list of tabs, each with a list of kitty windows. It is NOT a flat list
---- of windows, so we have to descend into `tabs[].windows[]` to find the one
---- matching M.current_repl.
+--- @param repl_id number|nil: defaults to the repl bound to the current project (cwd).
 ---
---- We check `foreground_processes` (what's currently running in the pane)
---- rather than the window's original launch `pid`/`comm`, because if the
---- window was opened as a plain shell (M.new_repl) and ipython/python was
---- started manually afterwards, the launch PID would still resolve to the
---- shell, never to python.
----
-M.is_python_running_in_repl = function()
-  if not M.current_repl then
+M.is_python_running_in_repl = function(repl_id)
+  repl_id = repl_id or M.get_current_repl()
+  if not repl_id then
     return false
   end
 
-  local output = vim.fn.system('kitty @ ls')
-  local ok, os_windows = pcall(vim.json.decode, output)
-  if not ok then
-    vim.notify("Failed to decode `kitty @ ls` output", vim.log.levels.ERROR)
+  local win = find_kitty_window(repl_id)
+  if not win then
     return false
   end
 
-  for _, os_window in ipairs(os_windows) do
-    for _, tab in ipairs(os_window.tabs or {}) do
-      for _, win in ipairs(tab.windows or {}) do
-        if win.id == M.current_repl then
-          for _, proc in ipairs(win.foreground_processes or {}) do
-            local cmd = proc.cmdline and proc.cmdline[1] or ""
-            -- matches "python", "python3", "ipython", etc.
-            if cmd:match("python") then
-              return true
-            end
-          end
-          return false
-        end
-      end
+  for _, proc in ipairs(win.foreground_processes or {}) do
+    local cmd = proc.cmdline and proc.cmdline[1] or ""
+    if cmd:match("python") then  -- matches "python", "python3", "ipython", etc.
+      return true
     end
   end
-
   return false
 end
 
---- Send text to the REPL, with optional language check.
+--- Send text to the REPL bound to the current project (cwd), with optional
+--- language check. Multi-line sends are wrapped in bracketed-paste escapes
+--- so indentation-sensitive blocks (loops, defs, decorators, blank lines
+--- inside a block) survive the trip intact.
 --- @param text string: The text to send.
 --- @param language string|nil: The language of the code (defaults to current buffer's filetype).
 ---
- M.send = function(text, language)
+M.send = function(text, language)
   language = language or vim.bo.filetype
+  local repl_id = M.get_current_repl()
 
-  if language == "python" and not M.is_python_running_in_repl() then
-    vim.notify("No Python console is running in the terminal. Start it manually first.", vim.log.levels.WARN)
+  if not repl_id then
+    vim.notify(
+      "No REPL bound to this project. Run new_repl(), new_python_repl(), or select_repl() first.",
+      vim.log.levels.WARN
+    )
     return
   end
-  if not M.current_repl then
-    vim.notify("No REPL window set.", vim.log.levels.WARN)
+
+  -- Only check for Python if the language is Python
+  if language == "python" and not M.is_python_running_in_repl(repl_id) then
+    vim.notify(
+      "No Python console is running in the terminal. Start it manually first.",
+      vim.log.levels.WARN
+    )
     return
   end
 
   text = text:gsub('[\r\n]+', '\n'):gsub('\n%s*\n', '\n'):gsub('^\n+', ''):gsub('\n+$', ''):gsub('\n', '\\n')
 
+  -- The trailing newline(s) must come AFTER the paste-end marker, not
+  -- before it. Bracketed paste exists precisely so a shell/REPL can tell
+  -- "this newline was part of a paste" from "this newline is an Enter
+  -- keypress" -- newlines *inside* the paste don't auto-submit. Put them
+  -- inside and you get exactly what you saw: code fills the prompt but
+  -- needs a manual Enter. Two newlines after BP_END covers REPLs (plain
+  -- python) that need a blank line to close an indented block.
+  local payload = BP_START .. text .. BP_END .. '\\n\\n'
+
+  -- Pass as a table (argv), not a formatted shell string: avoids shell
+  -- interpretation of $, `, \, etc. inside the code being sent, and lets
+  -- the raw ESC bytes in BP_START/BP_END reach kitty untouched.
   local result = vim.fn.system({
     'kitty', '@', 'send-text',
-    '--match', 'id:' .. tostring(M.current_repl),
-    text .. '\\n\\n',
+    '--match', 'id:' .. tostring(repl_id),
+    payload,
   })
   if vim.v.shell_error ~= 0 then
     vim.notify('kitty send-text failed: ' .. result, vim.log.levels.ERROR)
   end
 end
-
 
 ---
 --- Send the current line to the REPL.
@@ -194,12 +395,18 @@ M.send_line = function()
 end
 
 ---
---- Send the visual selection to the REPL.
+--- Send the visual selection to the REPL. Restores the previous contents
+--- of register "z" afterwards so this doesn't clobber the user's register.
 ---
 M.send_visual = function()
+  local saved_z = vim.fn.getreg('z')
+  local saved_z_type = vim.fn.getregtype('z')
+
   vim.cmd.normal({ '"zy', bang = true })
   local selection = vim.fn.getreg('z')
   M.send(selection)
+
+  vim.fn.setreg('z', saved_z, saved_z_type)
 end
 
 ---
@@ -340,6 +547,5 @@ M.send_current_codeblock = function()
     M.send_line()
   end
 end
- 
+
 return M
- 

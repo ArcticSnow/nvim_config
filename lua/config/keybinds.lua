@@ -84,14 +84,15 @@ vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 vim.keymap.set('n', '+', '<CMD>Oil --float<CR>', { desc = 'Open parent directory - in floating window' })
 
 -- ##############      Kitty REPL             ##########################
-
-vim.keymap.set('n', '<A-t>', function()
+vim.keymap.set('n', '<leader>rs', require('custom.plugins.kitty_repl').select_repl, {desc = 'Select REPL'})
+vim.keymap.set('n', '<leader>ri', require('custom.plugins.kitty_repl').repl_status, {desc = 'REPL status'})
+vim.keymap.set('n', '<leader>rt', function()
   require('custom.plugins.kitty_repl').new_repl()
-end, { desc = 'Open Kitty  REPL' })
+end, { desc = 'Open Kitty Terminal REPL' })
 
-vim.keymap.set('n', '<A-p>', function()
+vim.keymap.set('n', '<leader>rp', function()
   require('custom.plugins.kitty_repl').new_python_repl()
-end, { desc = 'Open Kitty  REPL' })
+end, { desc = 'Open Kitty Python REPL' })
 
 
 
