@@ -53,6 +53,7 @@ vim.keymap.set("n", "<leader>tm", function() templates.pick(templates.insert) en
   silent = true,
   desc = "Insert template",
 })
+vim.keymap.set("n", "<leader>tt", "jjjwc$", {desc="Change heading title"})
 
 -- Display and navigate Table of Contents using Telescope
 vim.keymap.set("n", "<leader>ft", function()

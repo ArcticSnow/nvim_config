@@ -43,6 +43,20 @@ return{
 		    {
 			name= "Rose Pine Dawn",
 			colorscheme = "rose-pine-dawn"
+		    },
+		    {
+			name = "Melange light",
+			colorscheme = "melange",
+			before = [[
+			    vim.opt.background = "light"
+			    ]]
+		    },
+		    {
+			name = "Melange dark",
+			colorscheme = "melange",
+			before = [[
+			    vim.opt.background = "dark"
+			    ]]
 		    }
 
 
@@ -53,6 +67,9 @@ return{
 		-- add the config here
 	    })
 	end
+    },
+    { "savq/melange-nvim" ,
+	name="melange"
     },
     {
 	"rose-pine/neovim",
